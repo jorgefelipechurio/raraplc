@@ -1,0 +1,61 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+*.swp
+
+# STM32CubeIDE / STM32CubeMX
+Debug/
+Release/
+**/Debug/
+**/Release/
+*.launch
+.metadata/
+.settings/
+Backup/
+STM32CubeMX_Log.txt
+
+# PlatformIO
+.pio/
+.pioenvs/
+.piolibdeps/
+.vscode/.browse.c_cpp.db*
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/ipch
+
+# Build artifacts
+*.o
+*.obj
+*.elf
+*.bin
+*.hex
+*.map
+*.a
+build/
+
+# KiCad
+*.bak
+*.000
+*-bak
+_autosave-*
+*-save.pro
+fp-info-cache
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*.lck
+sym-lib-table.bak
+fp-lib-table.bak
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Editors
+.idea/
+*.iml
