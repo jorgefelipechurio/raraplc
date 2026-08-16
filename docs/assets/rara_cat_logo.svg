@@ -1,0 +1,26 @@
+<svg width="256" height="256" viewBox="0 0 100 100" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Rara Cat — mascota del Rara PLC</title>
+<desc>Gato geométrico con bigotes de pistas de circuito impreso terminados en vias. Proyecto open hardware auspiciado por Machina Rara.</desc>
+<!-- Silueta: tinta grafito #2B2B28 · rasgos: papel crema #F5F0E6 · vias: cobre #C1622E -->
+<!-- Variantes de marca: silueta crema #F5F0E6 sobre verde máscara #1F5C4D (contexto PLC) -->
+<g>
+<polygon points="30,40 22,12 48,32" fill="#2B2B28"/>
+<polygon points="52,32 78,12 70,40" fill="#2B2B28"/>
+<circle cx="50" cy="60" r="30" fill="#2B2B28"/>
+<circle cx="39" cy="56" r="4.5" fill="#F5F0E6"/>
+<circle cx="61" cy="56" r="4.5" fill="#F5F0E6"/>
+<polygon points="45,68 55,68 50,74" fill="#F5F0E6"/>
+<path d="M22 54 L6 48" stroke="#2B2B28" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+<path d="M20 62 L4 62" stroke="#2B2B28" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+<path d="M22 70 L6 76" stroke="#2B2B28" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+<path d="M78 54 L94 48" stroke="#2B2B28" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+<path d="M80 62 L96 62" stroke="#2B2B28" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+<path d="M78 70 L94 76" stroke="#2B2B28" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+<circle cx="5" cy="48" r="2.2" fill="#C1622E"/>
+<circle cx="3" cy="62" r="2.2" fill="#C1622E"/>
+<circle cx="5" cy="76" r="2.2" fill="#C1622E"/>
+<circle cx="95" cy="48" r="2.2" fill="#C1622E"/>
+<circle cx="97" cy="62" r="2.2" fill="#C1622E"/>
+<circle cx="95" cy="76" r="2.2" fill="#C1622E"/>
+</g>
+</svg>
