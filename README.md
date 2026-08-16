@@ -10,7 +10,7 @@
 
 RaraPLC is an open hardware and open source firmware industrial PLC, built around the STM32H743 (Arm Cortex-M7). It is designed around three goals at the same time:
 
-**1) AI in the firmware/software stack.** Claude is used as a working part of the development pipeline: schematic/PCB review, firmware architecture, code generation and review, documentation.
+**1) AI in the firmware/software stack.** Claude is used as a working part of the development pipeline: schematic/PCB review, firmware architecture, code generation and review, documentation. Add-ons are designed to be self-describing so an LLM can write their drivers directly, without an OS driver model: see [`docs/SELF_DESCRIBING_ADDONS.md`](docs/SELF_DESCRIBING_ADDONS.md).
 
 **2) AI in machine commissioning and revamping.** A structured workflow for bringing RaraPLC into new machines or migrating (revamping) legacy machines running old, closed-source PLCs, with Claude assisting the integration engineer end to end.
 
