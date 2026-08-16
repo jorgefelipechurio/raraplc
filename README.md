@@ -4,6 +4,8 @@
 
 **Open source industrial PLC built on the STMicroelectronics STM32H743, with an open hardware / open source approach and AI (Claude) integrated into the workflow from day one.**
 
+**New here?** Read [`docs/POSITIONING.md`](docs/POSITIONING.md) for the fast version: what RaraPLC actually is, how it bridges legacy PLC and robotics, and how AI works inside the project. Five-minute read, written for technical partners and evaluators.
+
 ## What is RaraPLC
 
 RaraPLC is an open hardware and open source firmware industrial PLC, built around the STM32H743 (Arm Cortex-M7). It is designed around three goals at the same time:
