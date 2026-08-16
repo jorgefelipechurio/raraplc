@@ -1,3 +1,5 @@
+![Rara Cat, mascota de RaraPLC](docs/assets/rara_cat_logo.svg)
+
 # RaraPLC
 
 **Open source industrial PLC built on the STMicroelectronics STM32H743, with an open hardware / open source approach and AI (Claude) integrated into the workflow from day one.**
@@ -28,7 +30,7 @@ Seed stage. This repository is the public entry point for the project: vision, a
 
 firmware/ : STM32H743 firmware (HAL/Cube + Arduino_Core_STM32 compatible)
 hardware/ : Schematics, PCB, BOM, 3D files (CERN-OHL-S v2)
-docs/ : Architecture, roadmap, design decisions
+docs/ : Architecture, roadmap, design decisions, brand assets
 .github/ : Issue/PR templates, community health files
 
 ## Roadmap (high level)
