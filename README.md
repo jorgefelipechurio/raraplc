@@ -18,7 +18,7 @@ RaraPLC is an open hardware and open source firmware industrial PLC, built aroun
 
 ## Why STM32H743
 
-Arm Cortex-M7 core, hardware FPU, up to 2 MB flash / 1 MB RAM: enough headroom for real industrial control loops plus on-device AI inference. Backed by [Arduino_Core_STM32](https://github.com/stm32duino/Arduino_Core_STM32) and the wider STM32duino / STM32Cube ecosystem: mature, actively maintained, open tooling. Rich peripheral set (FDCAN, Ethernet, multiple ADCs/timers) suited to industrial I/O.
+Arm Cortex-M7 core, hardware FPU, up to 2 MB flash / 1 MB RAM: enough headroom for real industrial control loops plus on-device AI inference. Backed by [Arduino_Core_STM32](https://github.com/stm32duino/Arduino_Core_STM32) and the wider STM32duino / STM32Cube ecosystem: mature, actively maintained, open tooling. Rich peripheral set (FDCAN, Ethernet, multiple ADCs/timers) suited to industrial I/O. Full rationale, including what we ruled out and why: [`docs/WHY_STM32H7.md`](docs/WHY_STM32H7.md).
 
 ## Open hardware, open source
 
