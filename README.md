@@ -1,4 +1,4 @@
-![Rara Cat, mascota de RaraPLC](docs/assets/rara_cat_logo.svg)
+![Rara Cat, mascota de RaraPLC](docs/assets/rara-cat-128.png)
 
 # RaraPLC
 
