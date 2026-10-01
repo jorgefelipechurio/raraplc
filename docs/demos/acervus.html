@@ -1,0 +1,835 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Acervus Panel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --font-display: 'IBM Plex Sans Condensed', 'Arial Narrow', sans-serif;
+    --font-body: 'IBM Plex Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+
+    --bg: #eef1f3;
+    --surface: #ffffff;
+    --surface-2: #e7ebee;
+    --surface-3: #dbe0e5;
+    --border: #d3d9df;
+    --text: #171b20;
+    --text-2: #4d5560;
+    --text-3: #838d99;
+
+    --accent: #0e7a86;
+    --accent-soft: #dff0f1;
+    --accent-text: #0a5b64;
+
+    --ok: #2f8f5b;
+    --ok-soft: #e2f3e9;
+    --warn: #ad7317;
+    --warn-soft: #f8edd6;
+    --critical: #b73c34;
+    --critical-soft: #f9e1df;
+    --violet: #6d4aa8;
+    --violet-soft: #efe7f7;
+
+    --shadow: 0 1px 2px rgba(23,27,32,0.06), 0 6px 16px -8px rgba(23,27,32,0.12);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1116;
+      --surface: #151b22;
+      --surface-2: #1b222a;
+      --surface-3: #232b34;
+      --border: #2b3440;
+      --text: #e7ebef;
+      --text-2: #a7b0bb;
+      --text-3: #6d7784;
+
+      --accent: #43c9d4;
+      --accent-soft: rgba(67,201,212,0.12);
+      --accent-text: #7fdde5;
+
+      --ok: #4fbb82;
+      --ok-soft: rgba(79,187,130,0.13);
+      --warn: #e3a83f;
+      --warn-soft: rgba(227,168,63,0.13);
+      --critical: #ea6058;
+      --critical-soft: rgba(234,96,88,0.14);
+      --violet: #b48ce8;
+      --violet-soft: rgba(180,140,232,0.14);
+
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 24px -10px rgba(0,0,0,0.5);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0d1116;
+    --surface: #151b22;
+    --surface-2: #1b222a;
+    --surface-3: #232b34;
+    --border: #2b3440;
+    --text: #e7ebef;
+    --text-2: #a7b0bb;
+    --text-3: #6d7784;
+
+    --accent: #43c9d4;
+    --accent-soft: rgba(67,201,212,0.12);
+    --accent-text: #7fdde5;
+
+    --ok: #4fbb82;
+    --ok-soft: rgba(79,187,130,0.13);
+    --warn: #e3a83f;
+    --warn-soft: rgba(227,168,63,0.13);
+    --critical: #ea6058;
+    --critical-soft: rgba(234,96,88,0.14);
+    --violet: #b48ce8;
+    --violet-soft: rgba(180,140,232,0.14);
+
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 24px -10px rgba(0,0,0,0.5);
+  }
+
+  * { box-sizing: border-box; }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 20px clamp(16px, 3vw, 32px) 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  a { color: inherit; }
+
+  /* ---------- Topbar ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+
+  .brand-mark { width: 30px; height: 30px; flex: none; }
+
+  .breadcrumb {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: 0.02em;
+    min-width: 0;
+  }
+  .breadcrumb .sep { color: var(--text-3); font-weight: 400; }
+  .breadcrumb .tenant { color: var(--text-2); display: flex; align-items: center; gap: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .breadcrumb .tenant svg { width: 10px; height: 10px; color: var(--text-3); flex: none; }
+
+  .topbar-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+  .avatar-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 12px 5px 5px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+  }
+  .avatar-chip .initials {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--accent); color: var(--surface);
+    font-family: var(--font-mono); font-weight: 600; font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .avatar-chip .who { display: flex; flex-direction: column; line-height: 1.2; }
+  .avatar-chip .who .name { font-weight: 600; font-size: 12.5px; }
+  .avatar-chip .who .role { font-size: 10.5px; color: var(--text-3); }
+
+  /* ---------- Stat tiles ---------- */
+  .stat-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .tile {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow);
+  }
+  .tile .tile-label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-3); }
+  .tile .tile-value { font-family: var(--font-display); font-weight: 700; font-size: 26px; font-variant-numeric: tabular-nums; }
+  .tile .tile-note { font-size: 12px; color: var(--text-2); }
+  .tile.accent-warn .tile-value { color: var(--warn); }
+  .tile.accent-ok .tile-value { color: var(--ok); }
+
+  /* ---------- Section shell ---------- */
+  .section { display: flex; flex-direction: column; gap: 10px; }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .section-head h2 {
+    margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 15px;
+    letter-spacing: 0.03em; text-transform: uppercase; text-wrap: balance;
+  }
+  .section-head .section-note { font-size: 12px; color: var(--text-3); }
+
+  .search-box { position: relative; display: flex; align-items: center; }
+  .search-box svg { position: absolute; left: 10px; width: 13px; height: 13px; color: var(--text-3); pointer-events: none; }
+  .search-box input {
+    width: 200px; max-width: 46vw; font: inherit; font-size: 12.5px;
+    padding: 7px 10px 7px 28px; border-radius: 7px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text);
+  }
+  .search-box input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .search-box input::placeholder { color: var(--text-3); }
+
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; }
+
+  /* ---------- Pinned cards ---------- */
+  .pinned-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .pin-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: var(--shadow);
+  }
+  .pin-top { display: flex; align-items: flex-start; gap: 10px; }
+  .pin-icon { width: 20px; height: 20px; flex: none; color: var(--text-2); margin-top: 1px; }
+  .pin-title-block { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .pin-path { font-family: var(--font-mono); font-weight: 600; font-size: 13.5px; word-break: break-word; }
+  .pin-path .org { color: var(--text-3); font-weight: 500; }
+  .pin-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .priv-badge {
+    display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; color: var(--text-3);
+    border: 1px solid var(--border); border-radius: 999px; padding: 2px 7px;
+  }
+  .priv-badge svg { width: 9px; height: 9px; }
+  .beta-badge {
+    display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+    color: var(--accent-text); background: var(--accent-soft); border-radius: 999px; padding: 2px 8px;
+  }
+  .pin-desc { font-size: 12.5px; color: var(--text-2); line-height: 1.5; flex: 1; }
+  .pin-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 4px; border-top: 1px solid var(--border); }
+  .pin-updated { font-size: 11px; color: var(--text-3); }
+  .pin-open { font-size: 11.5px; color: var(--text-3); }
+
+  /* ---------- Repo list ---------- */
+  .repo-list { display: flex; flex-direction: column; }
+  .repo-row-toggle {
+    all: unset; display: flex; align-items: flex-start; gap: 12px; width: 100%;
+    padding: 14px 16px; cursor: pointer; border-top: 1px solid var(--border);
+  }
+  .repo-item:first-child .repo-row-toggle { border-top: none; }
+  .repo-row-toggle:hover { background: var(--surface-2); }
+  .repo-row-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  .repo-icon-wrap { width: 20px; height: 20px; flex: none; color: var(--text-3); margin-top: 2px; }
+  .repo-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; text-align: left; }
+  .repo-title-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .repo-path { font-family: var(--font-mono); font-weight: 600; font-size: 13.5px; }
+  .repo-path .org { color: var(--text-3); font-weight: 500; }
+  .repo-desc { font-size: 12.5px; color: var(--text-2); }
+  .repo-topics { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .chip {
+    font-family: var(--font-mono); font-size: 11px; padding: 3px 8px; border-radius: 5px;
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--text-2);
+  }
+  .chip.priority-alta { background: var(--critical-soft); border-color: transparent; color: var(--critical); }
+  .chip.priority-media { background: var(--warn-soft); border-color: transparent; color: var(--warn); }
+
+  .repo-meta { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; min-width: 116px; }
+  .repo-updated { font-size: 11px; color: var(--text-3); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  .badge {
+    display: inline-flex; align-items: center; justify-content: center; padding: 3px 9px;
+    border-radius: 999px; font-size: 10.5px; font-weight: 600; white-space: nowrap; width: fit-content;
+  }
+  .badge.neutral { background: var(--surface-3); color: var(--text-2); }
+  .badge.state-open { background: var(--accent-soft); color: var(--accent-text); }
+  .badge.state-answered { background: var(--ok-soft); color: var(--ok); }
+  .badge.state-escalated { background: var(--violet-soft); color: var(--violet); }
+  .badge.state-closed { background: var(--surface-3); color: var(--text-3); }
+  .badge.warn { background: var(--warn-soft); color: var(--warn); }
+  .badge.critical { background: var(--critical-soft); color: var(--critical); }
+
+  .chevron { width: 14px; height: 14px; color: var(--text-3); transition: transform 0.15s ease; flex: none; margin-top: 3px; }
+  .repo-item.open .chevron { transform: rotate(90deg); color: var(--text); }
+
+  .repo-detail { grid-column: 1 / -1; overflow: hidden; max-height: 0; transition: max-height 0.22s ease; }
+  .repo-item.open .repo-detail { max-height: 320px; }
+  .repo-detail-inner { padding: 2px 16px 18px 48px; display: flex; flex-direction: column; gap: 12px; }
+
+  .readme-text { font-size: 12.5px; color: var(--text-2); line-height: 1.55; max-width: 62ch; }
+  .chip-row { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .thread-preview { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; background: var(--surface-2); border-radius: 8px; border: 1px solid var(--border); }
+  .thread-preview-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .thread-preview-num { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); }
+  .thread-preview-title { font-size: 12.5px; color: var(--text); flex: 1; min-width: 160px; }
+  .thread-preview-time { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); }
+
+  .detail-links { display: flex; gap: 16px; flex-wrap: wrap; }
+  .detail-link { font-size: 11.5px; color: var(--text-3); }
+
+  .m-meta-mobile { display: none; }
+
+  /* ---------- Board activity ---------- */
+  .board { display: flex; flex-direction: column; }
+  .board-item { display: flex; gap: 10px; padding: 12px 16px; border-top: 1px solid var(--border); }
+  .board-item:first-child { border-top: none; }
+
+  .board-icon {
+    width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    flex: none; background: var(--surface-2); color: var(--text-2);
+  }
+  .board-icon svg { width: 13px; height: 13px; }
+  .board-icon.claude { background: var(--accent-soft); color: var(--accent-text); }
+  .board-icon.system { background: var(--surface-3); color: var(--text-2); }
+
+  .board-body { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .board-top { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
+  .board-num { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); }
+  .board-project { font-size: 11px; color: var(--accent-text); font-weight: 600; font-family: var(--font-mono); }
+  .board-title { font-size: 12.5px; color: var(--text); line-height: 1.45; font-weight: 500; }
+  .board-note { font-size: 12px; color: var(--text-2); line-height: 1.45; }
+  .board-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 3px; }
+  .board-time { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); white-space: nowrap; }
+
+  .board-foot { padding: 12px 16px; font-size: 11px; color: var(--text-3); border-top: 1px solid var(--border); background: var(--surface-2); }
+  .board-foot code { font-family: var(--font-mono); background: var(--surface-3); padding: 1px 4px; border-radius: 3px; font-size: 10.5px; }
+
+  footer.page-foot {
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    padding-top: 4px; font-size: 11.5px; color: var(--text-3);
+  }
+  footer.page-foot .stack { font-family: var(--font-mono); letter-spacing: 0.02em; }
+
+  /* ---------- Two-column workspace ---------- */
+  .workspace { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr); gap: 16px; align-items: start; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 980px) {
+    .workspace { grid-template-columns: 1fr; }
+    .stat-tiles { grid-template-columns: repeat(2, 1fr); }
+    .pinned-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 640px) {
+    .pinned-grid { grid-template-columns: 1fr; }
+    .repo-row-toggle { flex-wrap: wrap; }
+    .repo-meta { flex-direction: row; min-width: 0; margin-left: 32px; align-items: center; }
+    .repo-detail-inner { padding-left: 16px; }
+    .repo-topics { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .stat-tiles { grid-template-columns: 1fr 1fr; }
+    .topbar-right { width: 100%; justify-content: space-between; }
+  }
+</style>
+
+<div class="page">
+
+  <!-- ============ TOPBAR ============ -->
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="4" y="21" width="26" height="6" rx="1.5" fill="var(--accent)"/>
+        <rect x="7" y="13" width="20" height="6" rx="1.5" fill="var(--accent)" opacity="0.68"/>
+        <rect x="10" y="5" width="14" height="6" rx="1.5" fill="var(--accent)" opacity="0.4"/>
+      </svg>
+      <div class="breadcrumb">
+        <span>Acervus</span>
+        <span class="sep">/</span>
+        <span class="tenant">Acme Metalworks <svg viewBox="0 0 12 8" fill="none"><path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="avatar-chip">
+        <span class="initials">MR</span>
+        <span class="who"><span class="name">M. Rivera</span><span class="role">Plant manager</span></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ STAT TILES ============ -->
+  <section class="stat-tiles" aria-label="Archive summary">
+    <div class="tile">
+      <span class="tile-label">Projects</span>
+      <span class="tile-value">7</span>
+      <span class="tile-note">1 commissioned this week</span>
+    </div>
+    <div class="tile accent-warn">
+      <span class="tile-label">Open threads</span>
+      <span class="tile-value">2</span>
+      <span class="tile-note">on the machine boards</span>
+    </div>
+    <div class="tile accent-ok">
+      <span class="tile-label">Ex Libris subscription</span>
+      <span class="tile-value" style="font-size:18px;">Up to date</span>
+      <span class="tile-note">Next renewal Oct 3</span>
+    </div>
+    <div class="tile">
+      <span class="tile-label">Last update</span>
+      <span class="tile-value" style="font-size:18px;">12 min ago</span>
+      <span class="tile-note">air-compressor · board</span>
+    </div>
+  </section>
+
+  <!-- ============ PINNED ============ -->
+  <section class="section" aria-label="Pinned resources">
+    <div class="section-head">
+      <h2>Pinned</h2>
+      <span class="section-note">documentation and development environment, not machine-specific</span>
+    </div>
+    <div class="pinned-grid">
+
+      <div class="pin-card">
+        <div class="pin-top">
+          <svg class="pin-icon" viewBox="0 0 16 16" fill="none"><path d="M8 3.8C6.8 3 5 2.6 3.2 2.8C2.6 2.9 2 3.4 2 4V12.5C2 13 2.5 13.4 3 13.3C4.7 13 6.6 13.4 8 14.2" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M8 3.8C9.2 3 11 2.6 12.8 2.8C13.4 2.9 14 3.4 14 4V12.5C14 13 13.5 13.4 13 13.3C11.3 13 9.4 13.4 8 14.2" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M8 3.8V14.2" stroke="currentColor" stroke-width="1.2"/></svg>
+          <div class="pin-title-block">
+            <span class="pin-path"><span class="org">rara-plc /</span> public-docs</span>
+            <div class="pin-badges">
+              <span class="priv-badge"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.8" stroke="currentColor" stroke-width="1.3"/><path d="M2.2 8H13.8M8 2.2C9.7 4 10.6 6 10.6 8C10.6 10 9.7 12 8 13.8C6.3 12 5.4 10 5.4 8C5.4 6 6.3 4 8 2.2Z" stroke="currentColor" stroke-width="1.1"/></svg>Public</span>
+            </div>
+          </div>
+        </div>
+        <p class="pin-desc">General platform documentation: Ring 1 firmware, drivers, installation guides. Always free — never machine-specific.</p>
+        <div class="pin-foot"><span class="pin-updated">Updated 4 days ago</span><span class="pin-open">Open ↗</span></div>
+      </div>
+
+      <div class="pin-card">
+        <div class="pin-top">
+          <svg class="pin-icon" viewBox="0 0 16 16" fill="none"><path d="M8 3.8C6.8 3 5 2.6 3.2 2.8C2.6 2.9 2 3.4 2 4V12.5C2 13 2.5 13.4 3 13.3C4.7 13 6.6 13.4 8 14.2" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M8 3.8C9.2 3 11 2.6 12.8 2.8C13.4 2.9 14 3.4 14 4V12.5C14 13 13.5 13.4 13 13.3C11.3 13 9.4 13.4 8 14.2" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M8 3.8V14.2" stroke="currentColor" stroke-width="1.2"/></svg>
+          <div class="pin-title-block">
+            <span class="pin-path"><span class="org">acme-metalworks /</span> private-knowledge</span>
+            <div class="pin-badges">
+              <span class="priv-badge"><svg viewBox="0 0 16 16" fill="none"><rect x="3.2" y="7" width="9.6" height="7" rx="1.3" stroke="currentColor" stroke-width="1.3"/><path d="M5.2 7V5C5.2 3.5 6.4 2.3 8 2.3C9.6 2.3 10.8 3.5 10.8 5V7" stroke="currentColor" stroke-width="1.3"/></svg>Private</span>
+            </div>
+          </div>
+        </div>
+        <p class="pin-desc">The shop's own engineering vault: tuning methodology, HMI architecture, recovery mechanisms — expertise that does not travel with any one machine.</p>
+        <div class="pin-foot"><span class="pin-updated">Updated 9 days ago</span><span class="pin-open">Open ↗</span></div>
+      </div>
+
+      <div class="pin-card">
+        <div class="pin-top">
+          <svg class="pin-icon" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4.2 6L6.6 8L4.2 10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10.3H11.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <div class="pin-title-block">
+            <span class="pin-path"><span class="org">rara-plc /</span> runtime-ears</span>
+            <div class="pin-badges">
+              <span class="priv-badge"><svg viewBox="0 0 16 16" fill="none"><rect x="3.2" y="7" width="9.6" height="7" rx="1.3" stroke="currentColor" stroke-width="1.3"/><path d="M5.2 7V5C5.2 3.5 6.4 2.3 8 2.3C9.6 2.3 10.8 3.5 10.8 5V7" stroke="currentColor" stroke-width="1.3"/></svg>Ring 2</span>
+              <span class="beta-badge">Beta</span>
+            </div>
+          </div>
+        </div>
+        <p class="pin-desc">Environment for authoring and compiling a new block: Extended EARS → specification auditor (HAZOP) → digital-twin simulation → signing and OTA bank.</p>
+        <div class="pin-foot"><span class="pin-updated">Updated 1 day ago</span><span class="pin-open">Open ↗</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ WORKSPACE: PROJECTS + BOARD ============ -->
+  <main class="workspace">
+
+    <!-- ---- Projects (per-machine Libris) ---- -->
+    <section class="panel" aria-label="Machine projects">
+      <div class="section-head" style="padding:14px 16px; border-bottom:1px solid var(--border); margin:0;">
+        <h2>Projects — one Libris per machine</h2>
+        <div class="search-box">
+          <svg viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5.2" stroke="currentColor" stroke-width="1.4"/><path d="M11 11L14.5 14.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <input id="m-search" type="search" placeholder="Search projects…" aria-label="Search projects">
+        </div>
+      </div>
+
+      <div class="repo-list" id="m-list">
+
+        <!-- Horno 2 -->
+        <div class="repo-item">
+          <button class="repo-row-toggle" aria-expanded="false">
+            <svg class="repo-icon-wrap" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="9" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M2 7.5H14" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 5V3.5C6.5 3 6.9 2.5 7.5 2.5H8.5C9.1 2.5 9.5 3 9.5 3.5V5" stroke="currentColor" stroke-width="1.3"/></svg>
+            <span class="repo-main m-name-cell">
+              <span class="repo-title-line">
+                <span class="repo-path m-name"><span class="org">acme-metalworks /</span> oven-2</span>
+                <span class="priv-badge"><svg viewBox="0 0 16 16" fill="none"><rect x="3.2" y="7" width="9.6" height="7" rx="1.3" stroke="currentColor" stroke-width="1.3"/><path d="M5.2 7V5C5.2 3.5 6.4 2.3 8 2.3C9.6 2.3 10.8 3.5 10.8 5V7" stroke="currentColor" stroke-width="1.3"/></svg>Private</span>
+              </span>
+              <span class="repo-desc m-proc">Cooking temperature, classic PID with door interlock</span>
+              <span class="repo-topics"><span class="chip">classic-pid</span><span class="chip">interlock</span></span>
+            </span>
+            <span class="repo-meta">
+              <span class="badge neutral">0 threads</span>
+              <span class="repo-updated">2 days ago</span>
+            </span>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="repo-detail">
+            <div class="repo-detail-inner">
+              <p class="readme-text">Resistance-heated cooking oven. Classic PID with Ring 1 auditor; the door interlock is already confirmed and compiled.</p>
+              <div class="chip-row"><span class="chip">pid_temp_oven2</span><span class="chip">aud_oven2_heating</span></div>
+              <div class="thread-preview">
+                <div class="thread-preview-row">
+                  <span class="thread-preview-num">#142</span>
+                  <span class="thread-preview-title">Add a door interlock without touching anything else</span>
+                  <span class="badge state-closed">closed</span>
+                  <span class="thread-preview-time">2 days ago</span>
+                </div>
+              </div>
+              <div class="detail-links"><span class="detail-link">View full board ↗</span><span class="detail-link">Open in Extended EARS Runtime ↗</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Horno 1 -->
+        <div class="repo-item">
+          <button class="repo-row-toggle" aria-expanded="false">
+            <svg class="repo-icon-wrap" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="9" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M2 7.5H14" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 5V3.5C6.5 3 6.9 2.5 7.5 2.5H8.5C9.1 2.5 9.5 3 9.5 3.5V5" stroke="currentColor" stroke-width="1.3"/></svg>
+            <span class="repo-main m-name-cell">
+              <span class="repo-title-line">
+                <span class="repo-path m-name"><span class="org">acme-metalworks /</span> oven-1</span>
+                <span class="priv-badge"><svg viewBox="0 0 16 16" fill="none"><rect x="3.2" y="7" width="9.6" height="7" rx="1.3" stroke="currentColor" stroke-width="1.3"/><path d="M5.2 7V5C5.2 3.5 6.4 2.3 8 2.3C9.6 2.3 10.8 3.5 10.8 5V7" stroke="currentColor" stroke-width="1.3"/></svg>Private</span>
+              </span>
+              <span class="repo-desc m-proc">Temperature, AI-assisted gain scheduling on Kp</span>
+              <span class="repo-topics"><span class="chip">ai-active</span><span class="chip">gain-scheduling</span></span>
+            </span>
+            <span class="repo-meta">
+              <span class="badge neutral">0 threads</span>
+              <span class="repo-updated">6 h ago</span>
+            </span>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="repo-detail">
+            <div class="repo-detail-inner">
+              <p class="readme-text">Twin of oven 2, with gain scheduling: the embedded model adjusts Kp ±30% around the base value, without touching the PID structure.</p>
+              <div class="chip-row"><span class="chip">pid_temp_oven1</span><span class="chip">gain_scheduling_model</span><span class="chip">aud_oven1_heating</span></div>
+              <div class="thread-preview">
+                <div class="thread-preview-row">
+                  <span class="thread-preview-num">#144</span>
+                  <span class="thread-preview-title">Can the tuning adapt on its own between recipes?</span>
+                  <span class="badge state-closed">closed</span>
+                  <span class="thread-preview-time">6 h ago</span>
+                </div>
+              </div>
+              <div class="detail-links"><span class="detail-link">View full board ↗</span><span class="detail-link">Open in Extended EARS Runtime ↗</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hydraulic press -->
+        <div class="repo-item open">
+          <button class="repo-row-toggle" aria-expanded="true">
+            <svg class="repo-icon-wrap" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="9" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M2 7.5H14" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 5V3.5C6.5 3 6.9 2.5 7.5 2.5H8.5C9.1 2.5 9.5 3 9.5 3.5V5" stroke="currentColor" stroke-width="1.3"/></svg>
+            <span class="repo-main m-name-cell">
+              <span class="repo-title-line">
+                <span class="repo-path m-name"><span class="org">acme-metalworks /</span> hydraulic-press-40t</span>
+                <span class="priv-badge"><svg viewBox="0 0 16 16" fill="none"><rect x="3.2" y="7" width="9.6" height="7" rx="1.3" stroke="currentColor" stroke-width="1.3"/><path d="M5.2 7V5C5.2 3.5 6.4 2.3 8 2.3C9.6 2.3 10.8 3.5 10.8 5V7" stroke="currentColor" stroke-width="1.3"/></svg>Private</span>
+              </span>
+              <span class="repo-desc m-proc">Clamp position and force, with execution auditor</span>
+              <span class="repo-topics"><span class="chip">execution-auditor</span><span class="chip priority-alta">high priority</span></span>
+            </span>
+            <span class="repo-meta">
+              <span class="badge state-escalated">1 thread</span>
+              <span class="repo-updated">38 min ago</span>
+            </span>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="repo-detail">
+            <div class="repo-detail-inner">
+              <p class="readme-text">Injection clamp press. Execution auditor with rate-limit and hold_last_valid as fallback on a sudden position jump.</p>
+              <div class="chip-row"><span class="chip">pid_position_press</span><span class="chip">aud_press_clamp</span><span class="chip">interlock · overtravel</span></div>
+              <div class="thread-preview">
+                <div class="thread-preview-row">
+                  <span class="thread-preview-num">#145</span>
+                  <span class="thread-preview-title">The press stopped by itself mid-stroke</span>
+                  <span class="badge state-escalated">escalated to Support Bridge</span>
+                  <span class="thread-preview-time">38 min ago</span>
+                </div>
+              </div>
+              <div class="detail-links"><span class="detail-link">View full board ↗</span><span class="detail-link">Open in Extended EARS Runtime ↗</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mezcladora -->
+        <div class="repo-item">
+          <button class="repo-row-toggle" aria-expanded="false">
+            <svg class="repo-icon-wrap" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="9" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M2 7.5H14" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 5V3.5C6.5 3 6.9 2.5 7.5 2.5H8.5C9.1 2.5 9.5 3 9.5 3.5V5" stroke="currentColor" stroke-width="1.3"/></svg>
+            <span class="repo-main m-name-cell">
+              <span class="repo-title-line">
+                <span class="repo-path m-name"><span class="org">acme-metalworks /</span> resin-mixer</span>
+                <span class="priv-badge"><svg viewBox="0 0 16 16" fill="none"><rect x="3.2" y="7" width="9.6" height="7" rx="1.3" stroke="currentColor" stroke-width="1.3"/><path d="M5.2 7V5C5.2 3.5 6.4 2.3 8 2.3C9.6 2.3 10.8 3.5 10.8 5V7" stroke="currentColor" stroke-width="1.3"/></svg>Private</span>
+              </span>
+              <span class="repo-desc m-proc">Viscosity softsensor, embedded X-CUBE-AI model</span>
+              <span class="repo-topics"><span class="chip">ai-active</span><span class="chip">softsensor</span></span>
+            </span>
+            <span class="repo-meta">
+              <span class="badge neutral">0 threads</span>
+              <span class="repo-updated">1 day ago</span>
+            </span>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="repo-detail">
+            <div class="repo-detail-inner">
+              <p class="readme-text">Epoxy resin mixer. Embedded viscosity softsensor (X-CUBE-AI, int8), retrained on the digital twin.</p>
+              <div class="chip-row"><span class="chip">viscosity_softsensor_model</span><span class="chip">X-CUBE-AI · int8</span><span class="chip">flash bank B</span></div>
+              <div class="thread-preview">
+                <div class="thread-preview-row">
+                  <span class="thread-preview-num">#143</span>
+                  <span class="thread-preview-title">Uploaded a new dataset from the digital twin</span>
+                  <span class="badge state-closed">closed</span>
+                  <span class="thread-preview-time">1 day ago</span>
+                </div>
+              </div>
+              <div class="detail-links"><span class="detail-link">View full board ↗</span><span class="detail-link">Open in Extended EARS Runtime ↗</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cinta transportadora -->
+        <div class="repo-item">
+          <button class="repo-row-toggle" aria-expanded="false">
+            <svg class="repo-icon-wrap" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="9" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M2 7.5H14" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 5V3.5C6.5 3 6.9 2.5 7.5 2.5H8.5C9.1 2.5 9.5 3 9.5 3.5V5" stroke="currentColor" stroke-width="1.3"/></svg>
+            <span class="repo-main m-name-cell">
+              <span class="repo-title-line">
+                <span class="repo-path m-name"><span class="org">acme-metalworks /</span> conveyor-l2</span>
+                <span class="priv-badge"><svg viewBox="0 0 16 16" fill="none"><rect x="3.2" y="7" width="9.6" height="7" rx="1.3" stroke="currentColor" stroke-width="1.3"/><path d="M5.2 7V5C5.2 3.5 6.4 2.3 8 2.3C9.6 2.3 10.8 3.5 10.8 5V7" stroke="currentColor" stroke-width="1.3"/></svg>Private</span>
+              </span>
+              <span class="repo-desc m-proc">Belt start/stop and position, line 2</span>
+              <span class="repo-topics"><span class="chip">classic-pid</span></span>
+            </span>
+            <span class="repo-meta">
+              <span class="badge neutral">0 threads</span>
+              <span class="repo-updated">5 days ago</span>
+            </span>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="repo-detail">
+            <div class="repo-detail-inner">
+              <p class="readme-text">Line 2 conveyor, start/stop and simple positioning. No changes since commissioning.</p>
+              <div class="chip-row"><span class="chip">pid_conveyor_l2</span><span class="chip">aud_conveyor_l2</span></div>
+              <div class="thread-preview">
+                <div class="thread-preview-row">
+                  <span class="thread-preview-num">#140</span>
+                  <span class="thread-preview-title">Full HIL commissioning, flash bank A</span>
+                  <span class="badge state-closed">closed</span>
+                  <span class="thread-preview-time">5 days ago</span>
+                </div>
+              </div>
+              <div class="detail-links"><span class="detail-link">View full board ↗</span><span class="detail-link">Open in Extended EARS Runtime ↗</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Air compressor -->
+        <div class="repo-item">
+          <button class="repo-row-toggle" aria-expanded="false">
+            <svg class="repo-icon-wrap" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="9" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M2 7.5H14" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 5V3.5C6.5 3 6.9 2.5 7.5 2.5H8.5C9.1 2.5 9.5 3 9.5 3.5V5" stroke="currentColor" stroke-width="1.3"/></svg>
+            <span class="repo-main m-name-cell">
+              <span class="repo-title-line">
+                <span class="repo-path m-name"><span class="org">acme-metalworks /</span> air-compressor</span>
+                <span class="priv-badge"><svg viewBox="0 0 16 16" fill="none"><rect x="3.2" y="7" width="9.6" height="7" rx="1.3" stroke="currentColor" stroke-width="1.3"/><path d="M5.2 7V5C5.2 3.5 6.4 2.3 8 2.3C9.6 2.3 10.8 3.5 10.8 5V7" stroke="currentColor" stroke-width="1.3"/></svg>Private</span>
+              </span>
+              <span class="repo-desc m-proc">Line pressure, screw compressor</span>
+              <span class="repo-topics"><span class="chip">classic-pid</span><span class="chip priority-media">medium priority</span></span>
+            </span>
+            <span class="repo-meta">
+              <span class="badge state-answered">1 thread</span>
+              <span class="repo-updated">12 min ago</span>
+            </span>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="repo-detail">
+            <div class="repo-detail-inner">
+              <p class="readme-text">Screw compressor, line pressure for the whole plant. Open finding on the pressure sensor, awaiting technician confirmation.</p>
+              <div class="chip-row"><span class="chip">pid_pressure_compressor</span><span class="chip">ai_line_pressure</span><span class="chip">aud_compressor</span></div>
+              <div class="thread-preview">
+                <div class="thread-preview-row">
+                  <span class="thread-preview-num">#146</span>
+                  <span class="thread-preview-title">The pressure sensor gets stuck at the same value</span>
+                  <span class="badge state-answered">answered</span>
+                  <span class="thread-preview-time">12 min ago</span>
+                </div>
+              </div>
+              <div class="detail-links"><span class="detail-link">View full board ↗</span><span class="detail-link">Open in Extended EARS Runtime ↗</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Legacy VFD -->
+        <div class="repo-item">
+          <button class="repo-row-toggle" aria-expanded="false">
+            <svg class="repo-icon-wrap" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="9" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M2 7.5H14" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 5V3.5C6.5 3 6.9 2.5 7.5 2.5H8.5C9.1 2.5 9.5 3 9.5 3.5V5" stroke="currentColor" stroke-width="1.3"/></svg>
+            <span class="repo-main m-name-cell">
+              <span class="repo-title-line">
+                <span class="repo-path m-name"><span class="org">acme-metalworks /</span> legacy-vfd</span>
+                <span class="priv-badge"><svg viewBox="0 0 16 16" fill="none"><rect x="3.2" y="7" width="9.6" height="7" rx="1.3" stroke="currentColor" stroke-width="1.3"/><path d="M5.2 7V5C5.2 3.5 6.4 2.3 8 2.3C9.6 2.3 10.8 3.5 10.8 5V7" stroke="currentColor" stroke-width="1.3"/></svg>Private</span>
+              </span>
+              <span class="repo-desc m-proc">Communication with the agitator motor drive, legacy integration</span>
+              <span class="repo-topics"><span class="chip">commissioned</span><span class="chip">accessible-layer</span></span>
+            </span>
+            <span class="repo-meta">
+              <span class="badge neutral">0 threads</span>
+              <span class="repo-updated">3 days ago</span>
+            </span>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="repo-detail">
+            <div class="repo-detail-inner">
+              <p class="readme-text">Legacy agitator VFD with a non-standard protocol (historical case). Non-standard communication documented as an accessible Ex Libris layer.</p>
+              <div class="chip-row"><span class="chip">legacy_vfd_comm</span><span class="chip">unrecognized device</span></div>
+              <div class="thread-preview">
+                <div class="thread-preview-row">
+                  <span class="thread-preview-num">#141</span>
+                  <span class="thread-preview-title">Odd protocol on the old drive, not sure if it is standard Modbus</span>
+                  <span class="badge state-closed">closed</span>
+                  <span class="thread-preview-time">3 days ago</span>
+                </div>
+              </div>
+              <div class="detail-links"><span class="detail-link">View full board ↗</span><span class="detail-link">Open in Extended EARS Runtime ↗</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ---- Board activity ---- -->
+    <aside class="panel" aria-label="Recent activity on the boards">
+      <div class="section-head" style="padding:14px 16px; border-bottom:1px solid var(--border); margin:0;">
+        <h2>Board activity</h2>
+        <span class="section-note">last 5 days</span>
+      </div>
+      <div class="board">
+
+        <div class="board-item">
+          <span class="board-icon claude"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1L9.6 6.4L15 8L9.6 9.6L8 15L6.4 9.6L1 8L6.4 6.4L8 1Z" fill="currentColor"/></svg></span>
+          <div class="board-body">
+            <div class="board-top"><span class="board-num">#146</span><span class="board-project">air-compressor</span></div>
+            <div class="board-title">The pressure sensor gets stuck at the same value</div>
+            <div class="board-note">Claude triage: HAZOP finding (sensor · NO), EARS rule forcing a safe position suggested — to be confirmed by the technician.</div>
+            <div class="board-badges"><span class="badge state-answered">answered</span><span class="chip priority-media">medium priority</span></div>
+          </div>
+          <span class="board-time">12 min ago</span>
+        </div>
+
+        <div class="board-item">
+          <span class="board-icon claude"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1L9.6 6.4L15 8L9.6 9.6L8 15L6.4 9.6L1 8L6.4 6.4L8 1Z" fill="currentColor"/></svg></span>
+          <div class="board-body">
+            <div class="board-top"><span class="board-num">#145</span><span class="board-project">hydraulic-press-40t</span></div>
+            <div class="board-title">The press stopped by itself mid-stroke</div>
+            <div class="board-note">Claude triage: the log confirms an execution-auditor fallback (rate-limit). Escalated to Support Bridge for live diagnosis.</div>
+            <div class="board-badges"><span class="badge state-escalated">escalated to Support Bridge</span><span class="chip priority-alta">high priority</span></div>
+          </div>
+          <span class="board-time">38 min ago</span>
+        </div>
+
+        <div class="board-item">
+          <span class="board-icon"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.6" stroke="currentColor" stroke-width="1.3"/><path d="M2.8 13.5C3.5 10.8 5.5 9.3 8 9.3C10.5 9.3 12.5 10.8 13.2 13.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
+          <div class="board-body">
+            <div class="board-top"><span class="board-num">#144</span><span class="board-project">oven-1</span></div>
+            <div class="board-title">Can the tuning adapt on its own between recipes?</div>
+            <div class="board-note">Closed — gain scheduling implemented and confirmed by the technician.</div>
+            <div class="board-badges"><span class="badge state-closed">closed</span></div>
+          </div>
+          <span class="board-time">6 h ago</span>
+        </div>
+
+        <div class="board-item">
+          <span class="board-icon"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.6" stroke="currentColor" stroke-width="1.3"/><path d="M2.8 13.5C3.5 10.8 5.5 9.3 8 9.3C10.5 9.3 12.5 10.8 13.2 13.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
+          <div class="board-body">
+            <div class="board-top"><span class="board-num">#143</span><span class="board-project">resin-mixer</span></div>
+            <div class="board-title">Uploaded a new dataset from the digital twin</div>
+            <div class="board-note">Closed — retrained in the Extended EARS Runtime, flash bank B self-test passed.</div>
+            <div class="board-badges"><span class="badge state-closed">closed</span></div>
+          </div>
+          <span class="board-time">1 day ago</span>
+        </div>
+
+        <div class="board-item">
+          <span class="board-icon"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.6" stroke="currentColor" stroke-width="1.3"/><path d="M2.8 13.5C3.5 10.8 5.5 9.3 8 9.3C10.5 9.3 12.5 10.8 13.2 13.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
+          <div class="board-body">
+            <div class="board-top"><span class="board-num">#142</span><span class="board-project">oven-2</span></div>
+            <div class="board-title">Add a door interlock without touching anything else</div>
+            <div class="board-note">Closed — EARS confirmed and compiled to a YAML block.</div>
+            <div class="board-badges"><span class="badge state-closed">closed</span></div>
+          </div>
+          <span class="board-time">2 days ago</span>
+        </div>
+
+        <div class="board-item">
+          <span class="board-icon"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.6" stroke="currentColor" stroke-width="1.3"/><path d="M2.8 13.5C3.5 10.8 5.5 9.3 8 9.3C10.5 9.3 12.5 10.8 13.2 13.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
+          <div class="board-body">
+            <div class="board-top"><span class="board-num">#141</span><span class="board-project">legacy-vfd</span></div>
+            <div class="board-title">Odd protocol on the old drive, not sure if it is standard Modbus</div>
+            <div class="board-note">Closed — documented as an accessible Ex Libris layer.</div>
+            <div class="board-badges"><span class="badge state-closed">closed</span></div>
+          </div>
+          <span class="board-time">3 days ago</span>
+        </div>
+
+        <div class="board-item">
+          <span class="board-icon system"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.8V3.4M8 12.6V14.2M14.2 8H12.6M3.4 8H1.8M12.3 3.7L11.2 4.8M4.8 11.2L3.7 12.3M12.3 12.3L11.2 11.2M4.8 4.8L3.7 3.7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+          <div class="board-body">
+            <div class="board-top"><span class="board-num">#140</span><span class="board-project">conveyor-l2</span></div>
+            <div class="board-title">Full HIL commissioning, flash bank A</div>
+            <div class="board-note">Closed — self-test OK.</div>
+            <div class="board-badges"><span class="badge state-closed">closed</span></div>
+          </div>
+          <span class="board-time">5 days ago</span>
+        </div>
+
+      </div>
+      <div class="board-foot">
+        Each thread lives as an issue in <strong>Acme Metalworks</strong>' private repo (GitHub App, one folder per machine). No live session: the technician writes when they can, Claude replies when appropriate — or escalates to <code>Support Bridge</code> if the machine needs to be seen in real time.
+      </div>
+    </aside>
+
+  </main>
+
+  <footer class="page-foot">
+    <span>Acervus panel — a static archive, in the spirit of a repo host: nothing here depends on the PLC being connected.</span>
+    <span class="stack">GitHub App per tenant · Ring 1 public · Ring 2 private</span>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var search = document.getElementById('m-search');
+    var items = Array.prototype.slice.call(document.querySelectorAll('.repo-item'));
+
+    search.addEventListener('input', function () {
+      var q = search.value.trim().toLowerCase();
+      items.forEach(function (item) {
+        var name = item.querySelector('.m-name').textContent.toLowerCase();
+        var proc = item.querySelector('.m-proc').textContent.toLowerCase();
+        var match = !q || name.indexOf(q) !== -1 || proc.indexOf(q) !== -1;
+        item.style.display = match ? '' : 'none';
+      });
+    });
+
+    items.forEach(function (item) {
+      var btn = item.querySelector('.repo-row-toggle');
+      btn.addEventListener('click', function () {
+        var isOpen = item.classList.contains('open');
+        items.forEach(function (other) {
+          other.classList.remove('open');
+          other.querySelector('.repo-row-toggle').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  })();
+</script>
+
+</body></html>

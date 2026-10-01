@@ -1,0 +1,550 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Extended EARS Runtime</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --font-display: 'IBM Plex Sans Condensed', 'Arial Narrow', sans-serif;
+    --font-body: 'IBM Plex Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+
+    --bg: #eef1f3;
+    --surface: #ffffff;
+    --surface-2: #e7ebee;
+    --surface-3: #dbe0e5;
+    --border: #d3d9df;
+    --text: #171b20;
+    --text-2: #4d5560;
+    --text-3: #838d99;
+
+    --accent: #0e7a86;
+    --accent-soft: #dff0f1;
+    --accent-text: #0a5b64;
+
+    --ok: #2f8f5b;
+    --ok-soft: #e2f3e9;
+    --warn: #ad7317;
+    --warn-soft: #f8edd6;
+    --critical: #b73c34;
+    --critical-soft: #f9e1df;
+    --violet: #6d4aa8;
+    --violet-soft: #efe7f7;
+
+    --shadow: 0 1px 2px rgba(23,27,32,0.06), 0 6px 16px -8px rgba(23,27,32,0.12);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1116; --surface: #151b22; --surface-2: #1b222a; --surface-3: #232b34; --border: #2b3440;
+      --text: #e7ebef; --text-2: #a7b0bb; --text-3: #6d7784;
+      --accent: #43c9d4; --accent-soft: rgba(67,201,212,0.12); --accent-text: #7fdde5;
+      --ok: #4fbb82; --ok-soft: rgba(79,187,130,0.13);
+      --warn: #e3a83f; --warn-soft: rgba(227,168,63,0.13);
+      --critical: #ea6058; --critical-soft: rgba(234,96,88,0.14);
+      --violet: #b48ce8; --violet-soft: rgba(180,140,232,0.14);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 24px -10px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d1116; --surface: #151b22; --surface-2: #1b222a; --surface-3: #232b34; --border: #2b3440;
+    --text: #e7ebef; --text-2: #a7b0bb; --text-3: #6d7784;
+    --accent: #43c9d4; --accent-soft: rgba(67,201,212,0.12); --accent-text: #7fdde5;
+    --ok: #4fbb82; --ok-soft: rgba(79,187,130,0.13);
+    --warn: #e3a83f; --warn-soft: rgba(227,168,63,0.13);
+    --critical: #ea6058; --critical-soft: rgba(234,96,88,0.14);
+    --violet: #b48ce8; --violet-soft: rgba(180,140,232,0.14);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 24px -10px rgba(0,0,0,0.5);
+  }
+
+  * { box-sizing: border-box; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body);
+    font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 1200px; margin: 0 auto; padding: 20px clamp(16px, 3vw, 32px) 48px; display: flex; flex-direction: column; gap: 18px; }
+  a { color: inherit; }
+
+  /* ---------- Topbar ---------- */
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .brand-mark { width: 28px; height: 28px; flex: none; }
+  .breadcrumb { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; font-family: var(--font-display); font-weight: 700; font-size: 17px; letter-spacing: 0.01em; min-width: 0; }
+  .breadcrumb .sep { color: var(--text-3); font-weight: 400; }
+  .breadcrumb .tenant, .breadcrumb .crumb { color: var(--text-2); }
+  .breadcrumb .crumb.current { color: var(--text); }
+  .avatar-chip { display: flex; align-items: center; gap: 8px; padding: 5px 12px 5px 5px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); }
+  .avatar-chip .initials { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--surface); font-family: var(--font-mono); font-weight: 600; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+  .avatar-chip .who { display: flex; flex-direction: column; line-height: 1.2; }
+  .avatar-chip .who .name { font-weight: 600; font-size: 12.5px; }
+  .avatar-chip .who .role { font-size: 10.5px; color: var(--text-3); }
+
+  /* ---------- Flow tabs ---------- */
+  .flow-tabs { display: flex; gap: 6px; }
+  .flow-tab { all: unset; cursor: pointer; padding: 9px 15px; border-radius: 8px; font-size: 12.5px; font-weight: 600; color: var(--text-3); border: 1px solid transparent; }
+  .flow-tab .n { font-family: var(--font-mono); margin-right: 7px; color: var(--text-3); }
+  .flow-tab.active { background: var(--surface); border-color: var(--border); color: var(--text); box-shadow: var(--shadow); }
+  .flow-tab.active .n { color: var(--accent-text); }
+  .flow-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .view { display: flex; flex-direction: column; gap: 18px; }
+  .view[hidden] { display: none; }
+
+  /* ---------- Form (view 1) ---------- */
+  .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); padding: 22px 24px; display: flex; flex-direction: column; gap: 22px; max-width: 640px; }
+  .form-section { display: flex; flex-direction: column; gap: 14px; }
+  .form-section h3 { margin: 0; font-family: var(--font-display); font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; color: var(--text-2); }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 12.5px; font-weight: 600; }
+  .field .hint { font-size: 11.5px; color: var(--text-3); }
+  .input-group { display: flex; align-items: center; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+  .input-group .prefix { padding: 9px 10px; background: var(--surface-2); font-family: var(--font-mono); font-size: 12.5px; color: var(--text-3); border-right: 1px solid var(--border); white-space: nowrap; }
+  .input-group input { border: none; padding: 9px 10px; font: inherit; font-size: 13px; flex: 1; min-width: 0; background: transparent; color: var(--text); }
+  .input-group input:focus { outline: none; }
+  .text-input { border: 1px solid var(--border); border-radius: 8px; padding: 9px 11px; font: inherit; font-size: 13px; background: var(--surface); color: var(--text); width: 100%; }
+  .text-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .topic-editor { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; border: 1px solid var(--border); border-radius: 8px; padding: 8px; }
+  .topic-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 3px 6px 3px 10px; font-family: var(--font-mono); font-size: 11px; color: var(--text-2); }
+  .topic-chip button { all: unset; cursor: pointer; width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; color: var(--text-3); border-radius: 50%; }
+  .topic-chip button:hover { background: var(--surface-3); color: var(--text); }
+  .topic-input { border: none; flex: 1; min-width: 120px; font: inherit; font-size: 12px; background: transparent; color: var(--text); }
+  .topic-input:focus { outline: none; }
+
+  .radio-card { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--border); border-radius: 9px; padding: 12px; cursor: pointer; }
+  .radio-card:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+  .radio-card input { margin-top: 3px; accent-color: var(--accent); }
+  .radio-card .rc-text strong { font-size: 13px; }
+  .radio-card .rc-text p { margin: 3px 0 0; font-size: 11.5px; color: var(--text-2); }
+
+  .visibility-row { display: flex; align-items: flex-start; gap: 10px; padding: 12px; border: 1px dashed var(--border); border-radius: 9px; background: var(--surface-2); }
+  .visibility-row svg { width: 16px; height: 16px; color: var(--text-3); flex: none; margin-top: 1px; }
+  .visibility-row .vr-text strong { font-size: 12.5px; }
+  .visibility-row .vr-text p { margin: 2px 0 0; font-size: 11.5px; color: var(--text-3); }
+
+  .form-foot { display: flex; justify-content: flex-end; }
+  .btn { font: inherit; font-size: 12.5px; font-weight: 600; padding: 9px 16px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { filter: brightness(0.94); }
+  .btn-ghost { background: transparent; border-color: var(--border); color: var(--text-2); }
+  .btn-ghost:hover { background: var(--surface-2); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .btn-sm { padding: 6px 13px; font-size: 12px; }
+
+  /* ---------- View 2: workspace ---------- */
+  .workspace2 { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr); gap: 16px; align-items: start; }
+
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); }
+  .panel-inner { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+  .panel-head-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .panel-head-row h2 { margin: 0; font-family: var(--font-display); font-size: 15px; letter-spacing: 0.03em; text-transform: uppercase; font-weight: 700; }
+  .panel-head-row .sub { font-size: 11.5px; color: var(--text-3); }
+
+  .stepper { display: flex; flex-wrap: wrap; gap: 0; border-bottom: 1px solid var(--border); }
+  .step { display: flex; align-items: center; gap: 7px; padding: 9px 14px 9px 0; margin-right: 16px; border-bottom: 2px solid var(--border); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-3); }
+  .step .num { width: 17px; height: 17px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 9.5px; color: var(--text-3); flex: none; }
+  .step.done { color: var(--ok); border-color: var(--ok); }
+  .step.done .num { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+  .step.active { color: var(--accent-text); border-color: var(--accent); }
+  .step.active .num { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-text); }
+
+  .ears-thread { display: flex; flex-direction: column; gap: 12px; }
+  .ears-msg { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .ears-msg[hidden] { display: none; }
+  .ears-msg-head { display: flex; align-items: center; gap: 8px; padding: 9px 13px; background: var(--surface-2); border-bottom: 1px solid var(--border); }
+  .ears-msg-icon { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; background: var(--surface-3); color: var(--text-2); flex: none; }
+  .ears-msg-icon svg { width: 12px; height: 12px; }
+  .ears-msg.role-claude .ears-msg-icon { background: var(--accent-soft); color: var(--accent-text); }
+  .ears-msg-label { font-weight: 600; font-size: 12.5px; }
+  .ears-msg-time { margin-left: auto; font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); }
+  .ears-msg-body { padding: 13px 14px; display: flex; flex-direction: column; gap: 10px; }
+  .ears-msg-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .ears-quote { font-family: var(--font-mono); font-size: 12.5px; color: var(--text-2); background: var(--surface-2); border-left: 3px solid var(--accent); padding: 9px 11px; border-radius: 0 6px 6px 0; }
+  .ears-severity { display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); width: fit-content; }
+  .ears-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .ears-state-badge { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; width: fit-content; }
+  .ears-state-badge.confirmed { background: var(--ok-soft); color: var(--ok); }
+  .ears-state-badge.discarded { background: var(--surface-3); color: var(--text-3); }
+
+  .code-block { font-family: var(--font-mono); font-size: 11.5px; line-height: 1.6; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; overflow-x: auto; white-space: pre; color: var(--text-2); }
+  .code-note { font-size: 11.5px; color: var(--text-3); }
+
+  .composer { display: flex; gap: 8px; align-items: flex-end; border: 1px solid var(--border); border-radius: 10px; padding: 10px; background: var(--surface); }
+  .composer textarea { flex: 1; border: none; resize: none; font: inherit; font-size: 13px; background: transparent; color: var(--text); min-height: 40px; }
+  .composer textarea:focus { outline: none; }
+  .composer-row { display: flex; flex-direction: column; gap: 6px; }
+  .composer-status { font-size: 11px; color: var(--accent-text); min-height: 14px; }
+
+  /* ---------- Knowledge panel ---------- */
+  .search-box { position: relative; display: flex; align-items: center; }
+  .search-box svg { position: absolute; left: 10px; width: 13px; height: 13px; color: var(--text-3); pointer-events: none; }
+  .search-box input { width: 100%; font: inherit; font-size: 12.5px; padding: 8px 10px 8px 30px; border-radius: 7px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); }
+  .search-box input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .know-panel { display: flex; flex-direction: column; gap: 10px; }
+  .know-result { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .know-path { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); }
+  .know-title { font-weight: 600; font-size: 13px; }
+  .know-excerpt { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+  .know-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .know-tag { font-family: var(--font-mono); font-size: 10px; color: var(--text-3); }
+  .know-open { font-size: 11px; color: var(--text-3); }
+  .know-note { font-size: 11px; color: var(--text-3); padding-top: 4px; border-top: 1px solid var(--border); }
+
+  footer.page-foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 4px; font-size: 11.5px; color: var(--text-3); }
+  footer.page-foot .stack { font-family: var(--font-mono); letter-spacing: 0.02em; }
+
+  @media (max-width: 980px) { .workspace2 { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .topbar-right, .avatar-chip { flex-wrap: wrap; } }
+</style>
+
+<div class="page">
+
+  <!-- ============ TOPBAR ============ -->
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="4" y="21" width="26" height="6" rx="1.5" fill="var(--accent)"/>
+        <rect x="7" y="13" width="20" height="6" rx="1.5" fill="var(--accent)" opacity="0.68"/>
+        <rect x="10" y="5" width="14" height="6" rx="1.5" fill="var(--accent)" opacity="0.4"/>
+      </svg>
+      <div class="breadcrumb">
+        <span>Acervus</span><span class="sep">/</span>
+        <span class="tenant">Acme Metalworks</span><span class="sep">/</span>
+        <span class="crumb current" id="crumb-tail">New project</span>
+      </div>
+    </div>
+    <div class="avatar-chip">
+      <span class="initials">MR</span>
+      <span class="who"><span class="name">M. Rivera</span><span class="role">Plant manager</span></span>
+    </div>
+  </header>
+
+  <nav class="flow-tabs" aria-label="Use case steps">
+    <button class="flow-tab active" id="tab-1" data-view="1"><span class="n">1</span>New project</button>
+    <button class="flow-tab" id="tab-2" data-view="2"><span class="n">2</span>Extended EARS Runtime</button>
+  </nav>
+
+  <!-- ============ VIEW 1 — NEW PROJECT ============ -->
+  <section class="view" id="view-1">
+    <div class="form-card">
+
+      <div class="form-section">
+        <h3>Project identity</h3>
+        <div class="field">
+          <label for="proj-slug">Project name</label>
+          <div class="input-group">
+            <span class="prefix">acme-metalworks /</span>
+            <input id="proj-slug" type="text" value="extruder-line-3">
+          </div>
+          <span class="hint">Lowercase and hyphens — this becomes the folder name in the tenant repo.</span>
+        </div>
+        <div class="field">
+          <label for="proj-desc">Short description</label>
+          <input id="proj-desc" class="text-input" type="text" value="Profile extruder, feed axis driven by a stepper motor">
+        </div>
+        <div class="field">
+          <label>Initial topics</label>
+          <div class="topic-editor" id="topic-editor">
+            <span class="topic-chip">classic-pid<button aria-label="Remove topic classic-pid">×</button></span>
+            <span class="topic-chip">new-axis<button aria-label="Remove topic new-axis">×</button></span>
+            <input class="topic-input" placeholder="Add a topic and press Enter…" id="topic-input">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Data source</h3>
+        <label class="radio-card">
+          <input type="radio" name="origen" checked>
+          <span class="rc-text"><strong>HIL commissioning (recommended)</strong><p>Capture of the control script and peripheral configuration into Acervus is automatic in the professional firmware — no separate documentation needed.</p></span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="origen">
+          <span class="rc-text"><strong>Migration / revamping</strong><p>Bring in an existing machine that currently runs on another controller, documenting the as-built as it is surveyed.</p></span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="origen">
+          <span class="rc-text"><strong>Empty</strong><p>Start from scratch directly in the EARS runtime, with no prior commissioning.</p></span>
+        </label>
+      </div>
+
+      <div class="visibility-row">
+        <svg viewBox="0 0 16 16" fill="none"><rect x="3.2" y="7" width="9.6" height="7" rx="1.3" stroke="currentColor" stroke-width="1.3"/><path d="M5.2 7V5C5.2 3.5 6.4 2.3 8 2.3C9.6 2.3 10.8 3.5 10.8 5V7" stroke="currentColor" stroke-width="1.3"/></svg>
+        <span class="vr-text"><strong>Private — lives in the acme-metalworks repo</strong><p>All machines in a tenant are private by design; there is no public option.</p></span>
+      </div>
+
+      <div class="form-foot">
+        <button class="btn btn-primary" id="create-project">Create project →</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ VIEW 2 — EARS RUNTIME ============ -->
+  <section class="view" id="view-2" hidden>
+    <div class="workspace2">
+
+      <!-- Left: EARS thread -->
+      <div class="panel">
+        <div class="panel-inner">
+          <div class="panel-head-row">
+            <h2>Drafting block for <span id="p2-slug">extruder-line-3</span></h2>
+            <span class="sub">Ring 2 license — the compiled YAML is visible here, unlike in the technical chat or the faceplate.</span>
+          </div>
+
+          <div class="stepper">
+            <span class="step done" id="step-1"><span class="num">✓</span>Intent</span>
+            <span class="step active" id="step-2"><span class="num">2</span>EARS</span>
+            <span class="step" id="step-3"><span class="num">3</span>Specification auditor</span>
+            <span class="step" id="step-4"><span class="num">4</span>Compiled</span>
+          </div>
+
+          <div class="ears-thread">
+
+            <div class="ears-msg role-tecnico">
+              <div class="ears-msg-head">
+                <span class="ears-msg-icon"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.6" stroke="currentColor" stroke-width="1.3"/><path d="M2.8 13.5C3.5 10.8 5.5 9.3 8 9.3C10.5 9.3 12.5 10.8 13.2 13.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
+                <span class="ears-msg-label">Technician</span>
+                <span class="ears-msg-time">now</span>
+              </div>
+              <div class="ears-msg-body">
+                <p class="ears-msg-text">I want to add an X axis with a stepper motor. If the limit switch trips, the motor must stop immediately.</p>
+              </div>
+            </div>
+
+            <div class="ears-msg role-claude" id="msg-ears" data-quote="When DI_limit_x becomes ACTIVE, the system shall stop stepper_axis_x immediately (speed to 0).">
+              <div class="ears-msg-head">
+                <span class="ears-msg-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1L9.6 6.4L15 8L9.6 9.6L8 15L6.4 9.6L1 8L6.4 6.4L8 1Z" fill="currentColor"/></svg></span>
+                <span class="ears-msg-label">Claude · EARS proposal</span>
+                <span class="ears-msg-time">a few seconds ago</span>
+              </div>
+              <div class="ears-msg-body">
+                <p class="ears-quote">When DI_limit_x becomes ACTIVE, the system shall stop stepper_axis_x immediately (speed to 0).</p>
+                <div class="ears-actions">
+                  <button class="btn btn-primary btn-sm" data-action="confirm">Confirm</button>
+                  <button class="btn btn-ghost btn-sm" data-action="edit">Edit</button>
+                  <button class="btn btn-ghost btn-sm" data-action="discard">Discard</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="ears-msg role-claude" id="msg-auditor" hidden data-quote="If DI_limit_x does not report a valid state when stepper_axis_x is enabled, then the system shall keep stepper_axis_x disabled and report an interlock fault.">
+              <div class="ears-msg-head">
+                <span class="ears-msg-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5L13.5 3.5V7.5C13.5 10.8 11.2 13.4 8 14.5C4.8 13.4 2.5 10.8 2.5 7.5V3.5L8 1.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></span>
+                <span class="ears-msg-label">Specification auditor · HAZOP</span>
+                <span class="ears-msg-time">just now</span>
+              </div>
+              <div class="ears-msg-body">
+                <p class="ears-msg-text">Step 1 (linter): no broken references, no contradictions. Step 2 (HAZOP, guide word <strong>NO</strong>): what happens if DI_limit_x is faulted or has no valid signal when the axis is enabled?</p>
+                <span class="ears-severity">medium severity</span>
+                <p class="ears-quote">If DI_limit_x does not report a valid state when stepper_axis_x is enabled, then the system shall keep stepper_axis_x disabled and report an interlock fault.</p>
+                <div class="ears-actions">
+                  <button class="btn btn-primary btn-sm" data-action="confirm">Confirm</button>
+                  <button class="btn btn-ghost btn-sm" data-action="edit">Edit</button>
+                  <button class="btn btn-ghost btn-sm" data-action="discard">Discard</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="ears-msg role-claude" id="msg-compiled" hidden>
+              <div class="ears-msg-head">
+                <span class="ears-msg-icon"><svg viewBox="0 0 16 16" fill="none"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4.2 6L6.6 8L4.2 10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10.3H11.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
+                <span class="ears-msg-label">Compiled to block</span>
+                <span class="ears-msg-time">just now</span>
+              </div>
+              <div class="ears-msg-body">
+                <pre class="code-block">auditor:
+  id: aud_extruder_axis_x
+  target_output: do_stepper_axis_x
+  interlock_rules:
+    - description: "limit switch active"
+      condition: "DI_limit_x == ACTIVE"
+      action: "force_output(0)"
+    - description: "limit switch has no valid signal at enable"
+      condition: "DI_limit_x == INVALID"
+      action: "disable_output() ; report_fault('interlock')"</pre>
+                <span class="code-note">This YAML is not exposed in WhatsApp, the faceplate, or the Acervus summary — it is exclusive to the development runtime. Next step, outside this mockup: digital-twin simulation and signing for the inactive OTA bank.</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="composer-row">
+            <div class="composer">
+              <textarea id="composer-input" placeholder="Describe the intent in natural language…"></textarea>
+              <button class="btn btn-primary btn-sm" id="composer-send">Send</button>
+            </div>
+            <span class="composer-status" id="composer-status"></span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right: knowledge panel -->
+      <aside class="panel">
+        <div class="panel-inner">
+          <div class="panel-head-row">
+            <h2>Query RARA knowledge</h2>
+            <span class="sub">public-docs · runs in parallel, does not block EARS drafting</span>
+          </div>
+
+          <div class="search-box">
+            <svg viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5.2" stroke="currentColor" stroke-width="1.4"/><path d="M11 11L14.5 14.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <input id="know-search" type="search" value="stepper motor" aria-label="Search public-docs">
+          </div>
+
+          <div class="know-panel" id="know-results">
+
+            <div class="know-result">
+              <span class="know-path">public-docs / hardware / stepper-axes.md</span>
+              <span class="know-title">Stepper motor axes — supported interfaces</span>
+              <p class="know-excerpt">On the main board, any low-end output can drive the STEP/DIR inputs of an external stepper driver module (open loop, ~60 ns switching, so the driver sets the speed limit, not the PLC). Closed-loop axes with encoder feedback are stage 2: the RARA.MB motion HAT.</p>
+              <div class="know-foot"><span class="know-tag">hardware · low-end DO</span><span class="know-open">Open document ↗</span></div>
+            </div>
+
+            <div class="know-result">
+              <span class="know-path">public-docs / blocks / limit-switch-interlocks.md</span>
+              <span class="know-title">Limit switch as interlock — recommended EARS pattern</span>
+              <p class="know-excerpt">The standard pattern is event-driven ("When DI_x becomes ACTIVE…"), never a polled condition — this way the runtime auditor treats it as a hardware interlock, with the same priority as a door or an overtravel limit.</p>
+              <div class="know-foot"><span class="know-tag">EARS · pattern</span><span class="know-open">Open document ↗</span></div>
+            </div>
+
+            <div class="know-result">
+              <span class="know-path">public-docs / firmware / lowend-axis-wiring.md</span>
+              <span class="know-title">Low-end outputs and fast inputs for an axis</span>
+              <p class="know-excerpt">Use two low-end outputs for STEP and DIR (a third for ENABLE if the driver has one). Any digital input can be the limit switch; set its firmware filter to 0 ms if it also reads an encoder.</p>
+              <div class="know-foot"><span class="know-tag">hardware · pinout</span><span class="know-open">Open document ↗</span></div>
+            </div>
+
+          </div>
+
+          <span class="know-note">This searches public-docs (Ring 1, platform-wide) — never the private knowledge of another machine in this tenant.</span>
+        </div>
+      </aside>
+
+    </div>
+  </section>
+
+  <footer class="page-foot">
+    <span>Project creation → EARS drafting with parallel lookup of general knowledge — all inside the runtime, with no need for the PLC to be connected.</span>
+    <span class="stack">Ring 2 · GitHub App per tenant</span>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    // ---- flow tabs ----
+    var tabs = document.querySelectorAll('.flow-tab');
+    var views = { '1': document.getElementById('view-1'), '2': document.getElementById('view-2') };
+    function showView(n) {
+      Object.keys(views).forEach(function (k) {
+        views[k].hidden = (k !== n);
+      });
+      tabs.forEach(function (t) { t.classList.toggle('active', t.dataset.view === n); });
+    }
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () { showView(t.dataset.view); });
+    });
+
+    // ---- topic editor ----
+    var topicEditor = document.getElementById('topic-editor');
+    var topicInput = document.getElementById('topic-input');
+    topicEditor.addEventListener('click', function (e) {
+      if (e.target.tagName === 'BUTTON') { e.target.closest('.topic-chip').remove(); }
+    });
+    topicInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && topicInput.value.trim()) {
+        e.preventDefault();
+        var chip = document.createElement('span');
+        chip.className = 'topic-chip';
+        chip.textContent = topicInput.value.trim();
+        var btn = document.createElement('button');
+        btn.setAttribute('aria-label', 'Remove topic');
+        btn.textContent = '×';
+        chip.appendChild(btn);
+        topicEditor.insertBefore(chip, topicInput);
+        topicInput.value = '';
+      }
+    });
+
+    // ---- create project -> go to view 2 ----
+    document.getElementById('create-project').addEventListener('click', function () {
+      var slug = document.getElementById('proj-slug').value.trim() || 'new-project';
+      document.getElementById('crumb-tail').textContent = 'Extended EARS Runtime';
+      var crumbSlug = document.createElement('span');
+      document.getElementById('p2-slug').textContent = slug;
+      showView('2');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ---- stepper ----
+    function setStage(n) {
+      for (var i = 1; i <= 4; i++) {
+        var el = document.getElementById('step-' + i);
+        el.classList.remove('done', 'active');
+        if (i < n) { el.classList.add('done'); el.querySelector('.num').textContent = '✓'; }
+        else if (i === n) { el.classList.add('active'); el.querySelector('.num').textContent = i; }
+        else { el.querySelector('.num').textContent = i; }
+      }
+    }
+
+    // ---- ears message actions ----
+    var composerInput = document.getElementById('composer-input');
+
+    function wireMsg(id, nextId, nextStage) {
+      var msg = document.getElementById(id);
+      msg.querySelectorAll('button[data-action]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var action = btn.dataset.action;
+          var actions = msg.querySelector('.ears-actions');
+          if (action === 'confirm') {
+            var badge = document.createElement('span');
+            badge.className = 'ears-state-badge confirmed';
+            badge.textContent = 'confirmed';
+            actions.replaceWith(badge);
+            if (nextId) {
+              document.getElementById(nextId).hidden = false;
+              setStage(nextStage);
+            }
+          } else if (action === 'discard') {
+            var dbadge = document.createElement('span');
+            dbadge.className = 'ears-state-badge discarded';
+            dbadge.textContent = 'discarded';
+            actions.replaceWith(dbadge);
+            msg.style.opacity = '0.55';
+          } else if (action === 'edit') {
+            composerInput.value = msg.dataset.quote || '';
+            composerInput.focus();
+          }
+        });
+      });
+    }
+    wireMsg('msg-ears', 'msg-auditor', 3);
+    wireMsg('msg-auditor', 'msg-compiled', 4);
+
+    // ---- composer send (demo only) ----
+    var status = document.getElementById('composer-status');
+    document.getElementById('composer-send').addEventListener('click', function () {
+      if (!composerInput.value.trim()) return;
+      status.textContent = 'Sent — Claude is drafting the EARS proposal…';
+      composerInput.value = '';
+      setTimeout(function () { status.textContent = ''; }, 3000);
+    });
+
+    // ---- knowledge search filter ----
+    var knowSearch = document.getElementById('know-search');
+    var knowResults = document.querySelectorAll('#know-results .know-result');
+    knowSearch.addEventListener('input', function () {
+      var q = knowSearch.value.trim().toLowerCase();
+      knowResults.forEach(function (r) {
+        var text = r.textContent.toLowerCase();
+        r.style.display = (!q || text.indexOf(q) !== -1) ? '' : 'none';
+      });
+    });
+  })();
+</script>
+
+</body></html>
