@@ -1,0 +1,3 @@
+# Language statistics: helper scripts and docs are not part of the product code.
+tools/**  linguist-vendored
+docs/**   linguist-documentation
