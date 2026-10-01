@@ -66,6 +66,12 @@ More: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · [`docs/WHY_STM32H7.md`](
 
 Hardware is released under CERN-OHL-S v2 (see `hardware/LICENSE`). Firmware is released under the MIT License (see `firmware/LICENSE`). Components are chosen to be sourceable (LCSC part numbers alongside every design) and, where possible, in small standard packages so small shops and hobbyists can build it too.
 
+## Main board, Rev 1.0
+
+<img alt="RaraPLC main board Rev 1.0, 3D render (top view)" src="docs/assets/pcb-rev1.0/raraplc-rev1.0-3d.png">
+
+STM32H743 main board, 3D render from KiCad. 16 DI, 16 DO, 8 AI, Ethernet, 2× RS-485, CAN FD, USB-C and a 40-pin HAT header.
+
 ## Project status
 
 Seed stage. The runtime has been running the founder's own food-production machines for about 2,000 hours. The main board schematics are being finalized in KiCad and will be published here, with BOM and 3D files, once they are fabrication-ready.

@@ -19,6 +19,8 @@ Editable source: [`assets/diagrams/system-architecture.svg`](assets/diagrams/sys
 
 ## Main board
 
+<img alt="RaraPLC main board Rev 1.0, 3D render (top view)" src="assets/pcb-rev1.0/raraplc-rev1.0-3d.png">
+
 | Block | What it is | Why |
 |---|---|---|
 | MCU | STM32H743ZIT6 (LQFP-144), Cortex-M7 480 MHz, FPU | The 144-pin package frees ports F/G: all 8 analog inputs go to ADC3 on port F, physically away from Ethernet RMII and SPI noise. Same chip as the Nucleo-H743ZI used for Prototype 0. Full rationale: [`WHY_STM32H7.md`](WHY_STM32H7.md) |
