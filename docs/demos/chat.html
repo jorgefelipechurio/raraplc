@@ -1,0 +1,430 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Technical Chat · WhatsApp</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --font-display: 'IBM Plex Sans Condensed', 'Arial Narrow', sans-serif;
+    --font-body: 'IBM Plex Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+
+    --bg: #eef1f3; --surface: #ffffff; --surface-2: #e7ebee; --surface-3: #dbe0e5; --border: #d3d9df;
+    --text: #171b20; --text-2: #4d5560; --text-3: #838d99;
+
+    --accent: #0e7a86; --accent-soft: #dff0f1; --accent-text: #0a5b64;
+    --ok: #2f8f5b; --ok-soft: #e2f3e9;
+    --warn: #ad7317; --warn-soft: #f8edd6;
+    --critical: #b73c34; --critical-soft: #f9e1df;
+
+    --wa-chrome: #128a6b;
+    --wa-bg: #f2efe7;
+    --wa-out: #d6f0da;
+    --wa-in: #ffffff;
+
+    --shadow: 0 1px 2px rgba(23,27,32,0.06), 0 6px 16px -8px rgba(23,27,32,0.12);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1116; --surface: #151b22; --surface-2: #1b222a; --surface-3: #232b34; --border: #2b3440;
+      --text: #e7ebef; --text-2: #a7b0bb; --text-3: #6d7784;
+      --accent: #43c9d4; --accent-soft: rgba(67,201,212,0.12); --accent-text: #7fdde5;
+      --ok: #4fbb82; --ok-soft: rgba(79,187,130,0.13);
+      --warn: #e3a83f; --warn-soft: rgba(227,168,63,0.13);
+      --critical: #ea6058; --critical-soft: rgba(234,96,88,0.14);
+      --wa-chrome: #0e5c47; --wa-bg: #0b1712; --wa-out: #163a29; --wa-in: #182129;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 24px -10px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d1116; --surface: #151b22; --surface-2: #1b222a; --surface-3: #232b34; --border: #2b3440;
+    --text: #e7ebef; --text-2: #a7b0bb; --text-3: #6d7784;
+    --accent: #43c9d4; --accent-soft: rgba(67,201,212,0.12); --accent-text: #7fdde5;
+    --ok: #4fbb82; --ok-soft: rgba(79,187,130,0.13);
+    --warn: #e3a83f; --warn-soft: rgba(227,168,63,0.13);
+    --critical: #ea6058; --critical-soft: rgba(234,96,88,0.14);
+    --wa-chrome: #0e5c47; --wa-bg: #0b1712; --wa-out: #163a29; --wa-in: #182129;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 24px -10px rgba(0,0,0,0.5);
+  }
+
+  * { box-sizing: border-box; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 1160px; margin: 0 auto; padding: 20px clamp(16px, 3vw, 32px) 48px; display: flex; flex-direction: column; gap: 18px; }
+  a { color: inherit; }
+
+  /* ---------- Topbar ---------- */
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .brand-mark { width: 28px; height: 28px; flex: none; }
+  .breadcrumb { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; font-family: var(--font-display); font-weight: 700; font-size: 17px; min-width: 0; }
+  .breadcrumb .sep { color: var(--text-3); font-weight: 400; }
+  .breadcrumb .crumb { color: var(--text-2); }
+  .breadcrumb .crumb.current { color: var(--text); }
+  .avatar-chip { display: flex; align-items: center; gap: 8px; padding: 5px 12px 5px 5px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); }
+  .avatar-chip .initials { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--surface); font-family: var(--font-mono); font-weight: 600; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+  .avatar-chip .who { display: flex; flex-direction: column; line-height: 1.2; }
+  .avatar-chip .who .name { font-weight: 600; font-size: 12.5px; }
+  .avatar-chip .who .role { font-size: 10.5px; color: var(--text-3); }
+
+  .layout { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 22px; align-items: start; }
+
+  /* ---------- Phone shell ---------- */
+  .phone-shell { border: 1px solid var(--border); border-radius: 22px; overflow: hidden; box-shadow: var(--shadow); background: var(--wa-bg); }
+  .phone-status { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px 2px; background: var(--wa-chrome); color: #fff; font-family: var(--font-mono); font-size: 10.5px; }
+  .phone-status svg { width: 14px; height: 14px; }
+
+  .wa-header { display: flex; align-items: center; gap: 10px; padding: 10px 12px 12px; background: var(--wa-chrome); color: #fff; }
+  .wa-back { width: 18px; height: 18px; flex: none; opacity: 0.9; }
+  .wa-avatar { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-weight: 700; font-size: 13px; flex: none; }
+  .wa-header-text { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+  .wa-header-text .name { font-weight: 600; font-size: 14px; }
+  .wa-header-text .status { font-size: 11px; opacity: 0.85; }
+  .wa-header-icons { margin-left: auto; display: flex; gap: 14px; opacity: 0.9; }
+  .wa-header-icons svg { width: 17px; height: 17px; }
+
+  .context-banner { display: flex; align-items: center; gap: 7px; padding: 7px 12px; background: rgba(0,0,0,0.15); color: #fff; font-size: 11.5px; position: relative; }
+  .context-banner svg { width: 11px; height: 11px; flex: none; opacity: 0.85; }
+  .context-banner .cb-text { flex: 1; min-width: 0; }
+  .context-banner .cb-change { all: unset; cursor: pointer; font-weight: 600; text-decoration: underline; font-size: 11px; }
+  .context-menu { position: absolute; top: 100%; left: 12px; right: 12px; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow); z-index: 5; overflow: hidden; }
+  .context-menu[hidden] { display: none; }
+  .context-menu button { all: unset; display: block; width: 100%; padding: 9px 12px; font-size: 12.5px; cursor: pointer; box-sizing: border-box; }
+  .context-menu button:hover { background: var(--surface-2); }
+  .context-menu button + button { border-top: 1px solid var(--border); }
+
+  .wa-thread { padding: 14px 10px; display: flex; flex-direction: column; gap: 10px; min-height: 520px; }
+
+  .wa-divider { text-align: center; margin: 4px 0; }
+  .wa-divider span { display: inline-block; background: rgba(0,0,0,0.06); color: var(--text-2); font-size: 10.5px; padding: 3px 10px; border-radius: 8px; }
+
+  .wa-row { display: flex; }
+  .wa-row.out { justify-content: flex-end; }
+  .wa-row.in { justify-content: flex-start; }
+
+  .wa-bubble { max-width: 86%; border-radius: 10px; padding: 8px 10px 6px; font-size: 13px; box-shadow: 0 1px 1px rgba(0,0,0,0.08); }
+  .wa-row.out .wa-bubble { background: var(--wa-out); border-top-right-radius: 2px; }
+  .wa-row.in .wa-bubble { background: var(--wa-in); border-top-left-radius: 2px; }
+  .wa-bubble .wa-text { color: var(--text); line-height: 1.45; }
+  .wa-time { display: block; text-align: right; font-size: 10px; color: var(--text-3); margin-top: 3px; }
+
+  .wa-voice { display: flex; align-items: center; gap: 8px; }
+  .wa-voice svg { width: 26px; height: 26px; color: var(--accent-text); flex: none; }
+  .wa-voice .wave { flex: 1; height: 18px; display: flex; align-items: center; gap: 2px; }
+  .wa-voice .wave span { width: 2px; background: var(--text-3); border-radius: 1px; }
+  .wa-voice-dur { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); }
+  .wa-transcript { margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); font-size: 12px; color: var(--text-2); font-style: italic; }
+  .wa-transcript .tl { display: block; font-style: normal; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-3); margin-bottom: 2px; }
+
+  /* Rich cards (EARS / HAZOP / ajuste / bridge) inside an incoming bubble */
+  .wa-card { background: var(--wa-in); border-radius: 10px; border-top-left-radius: 2px; overflow: hidden; max-width: 86%; box-shadow: 0 1px 1px rgba(0,0,0,0.08); }
+  .wa-card-head { display: flex; align-items: center; gap: 6px; padding: 8px 10px 0; }
+  .wa-card-head .cardlabel { font-size: 10.5px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; color: var(--text-3); }
+  .wa-card-head .sev { margin-left: auto; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
+  .wa-card.role-hazop .cardlabel { color: var(--warn); }
+  .wa-card.role-ears .cardlabel { color: var(--accent-text); }
+  .wa-card.role-ajuste .cardlabel { color: var(--accent-text); }
+  .wa-card.role-bridge .cardlabel { color: var(--text-2); }
+  .wa-card-body { padding: 6px 10px 10px; display: flex; flex-direction: column; gap: 8px; }
+  .wa-card-body .lead { font-size: 12.5px; color: var(--text-2); line-height: 1.45; }
+  .wa-quote { font-family: var(--font-mono); font-size: 12px; color: var(--text); background: var(--surface-2); border-left: 3px solid var(--accent); padding: 7px 9px; border-radius: 0 6px 6px 0; line-height: 1.4; }
+  .wa-adjust-row { display: flex; align-items: baseline; gap: 8px; font-family: var(--font-mono); font-size: 13px; }
+  .wa-adjust-row .from { color: var(--text-3); text-decoration: line-through; }
+  .wa-adjust-row .to { color: var(--text); font-weight: 600; }
+  .status-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--surface-2); color: var(--text-2); width: fit-content; }
+  .status-pill .d { width: 6px; height: 6px; border-radius: 50%; background: var(--text-3); }
+  .status-pill.ready .d { background: var(--ok); }
+  .status-pill.ready { background: var(--ok-soft); color: var(--ok); }
+
+  .wa-buttons { border-top: 1px solid var(--border); }
+  .wa-buttons button { all: unset; display: flex; align-items: center; justify-content: center; width: 100%; padding: 9px 10px; font-size: 12.5px; font-weight: 600; color: var(--accent-text); cursor: pointer; box-sizing: border-box; }
+  .wa-buttons button:hover { background: var(--surface-2); }
+  .wa-buttons button + button { border-top: 1px solid var(--border); }
+  .wa-buttons button[data-action="discard"] { color: var(--text-3); }
+  .wa-buttons button[data-action="edit"] { color: var(--text-2); }
+  .wa-buttons button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  .wa-resolved { display: flex; align-items: center; gap: 6px; padding: 8px 10px; font-size: 11.5px; font-weight: 600; color: var(--ok); background: var(--ok-soft); }
+  .wa-resolved svg { width: 12px; height: 12px; }
+  .wa-resolved.discarded { color: var(--text-3); background: var(--surface-2); }
+
+  .wa-composer { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--surface-2); }
+  .wa-composer .input { flex: 1; background: var(--surface); border-radius: 999px; padding: 9px 14px; font-size: 12.5px; color: var(--text-3); }
+  .wa-composer svg { width: 20px; height: 20px; color: var(--text-2); flex: none; }
+
+  [hidden] { display: none !important; }
+
+  /* ---------- Notes panel ---------- */
+  .notes { display: flex; flex-direction: column; gap: 12px; }
+  .notes h2 { margin: 0 0 2px; font-family: var(--font-display); font-size: 15px; letter-spacing: 0.03em; text-transform: uppercase; font-weight: 700; }
+  .notes .notes-sub { font-size: 12px; color: var(--text-3); margin-bottom: 6px; }
+  .note-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 6px; }
+  .note-card .q { font-size: 11px; color: var(--text-3); }
+  .note-card .q strong { color: var(--text-2); font-weight: 600; }
+  .note-card .a { font-size: 12.5px; color: var(--text-2); line-height: 1.5; }
+  .note-card .a strong { color: var(--text); }
+
+  footer.page-foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 4px; font-size: 11.5px; color: var(--text-3); }
+  footer.page-foot .stack { font-family: var(--font-mono); letter-spacing: 0.02em; }
+
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } .phone-shell { max-width: 380px; margin: 0 auto; } }
+</style>
+
+<div class="page">
+
+  <!-- ============ TOPBAR ============ -->
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="4" y="21" width="26" height="6" rx="1.5" fill="var(--accent)"/>
+        <rect x="7" y="13" width="20" height="6" rx="1.5" fill="var(--accent)" opacity="0.68"/>
+        <rect x="10" y="5" width="14" height="6" rx="1.5" fill="var(--accent)" opacity="0.4"/>
+      </svg>
+      <div class="breadcrumb">
+        <span>Acervus</span><span class="sep">/</span>
+        <span class="crumb">Acme Metalworks</span><span class="sep">/</span>
+        <span class="crumb current">Technical chat · WhatsApp Business</span>
+      </div>
+    </div>
+    <div class="avatar-chip">
+      <span class="initials">MR</span>
+      <span class="who"><span class="name">M. Rivera</span><span class="role">Plant manager</span></span>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- ============ PHONE MOCKUP ============ -->
+    <div class="phone-shell">
+      <div class="phone-status">
+        <span>14:02</span>
+        <span style="display:flex; gap:6px; align-items:center;">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M1 11L4 8L4 14L1 14Z M6 9L9 6L9 14L6 14Z M11 6L14 3L14 14L11 14Z" fill="currentColor"/></svg>
+        </span>
+      </div>
+      <div class="wa-header">
+        <svg class="wa-back" viewBox="0 0 16 16" fill="none"><path d="M10 2.5L4 8L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="wa-avatar">R</span>
+        <div class="wa-header-text">
+          <span class="name">RARA PLC</span>
+          <span class="status">technical assistant · online</span>
+        </div>
+        <div class="wa-header-icons">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M2 4C2 3 3 2 4 2C5 3 5.3 4.5 5.7 5.5C5.9 6 5.7 6.4 5.3 6.7L4.4 7.4C5 9 7 11 8.6 11.6L9.3 10.7C9.6 10.3 10 10.1 10.5 10.3C11.5 10.7 13 11 14 11C15 12 14 13 13 13C8 13.5 2 9 2 4Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="3" r="1.1" fill="currentColor"/><circle cx="8" cy="8" r="1.1" fill="currentColor"/><circle cx="8" cy="13" r="1.1" fill="currentColor"/></svg>
+        </div>
+      </div>
+
+      <div class="context-banner">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6C3.5 9.2 8 14.5 8 14.5C8 14.5 12.5 9.2 12.5 6C12.5 3.5 10.5 1.5 8 1.5Z" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="6" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg>
+        <span class="cb-text">Talking about: <strong id="ctx-name">Oven 2 · temperature</strong></span>
+        <button class="cb-change" id="ctx-change">change</button>
+        <div class="context-menu" id="ctx-menu" hidden>
+          <button data-name="Oven 1 · temperature">Oven 1 · temperature</button>
+          <button data-name="Hydraulic press 40T">Hydraulic press 40T</button>
+          <button data-name="Air compressor">Air compressor</button>
+          <button data-name="Oven 2 · temperature">Oven 2 · temperature</button>
+        </div>
+      </div>
+
+      <div class="wa-thread" id="wa-thread">
+
+        <!-- 1 technician -->
+        <div class="wa-row out">
+          <div class="wa-bubble"><span class="wa-text">I want the heating to cut off if the door opens</span><span class="wa-time">14:02</span></div>
+        </div>
+
+        <!-- 2 EARS card -->
+        <div class="wa-row in">
+          <div class="wa-card role-ears" id="card-ears">
+            <div class="wa-card-head"><span class="cardlabel">EARS proposal</span></div>
+            <div class="wa-card-body">
+              <p class="wa-quote">When DI_oven2_door changes to OPEN, the system shall force do_ssr_oven2 to 0.</p>
+            </div>
+            <div class="wa-buttons">
+              <button data-action="confirm">Confirm</button>
+              <button data-action="edit">Edit</button>
+              <button data-action="discard">Discard</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 HAZOP card (hidden) -->
+        <div class="wa-row in" id="row-hazop" hidden>
+          <div class="wa-card role-hazop" id="card-hazop">
+            <div class="wa-card-head"><span class="cardlabel">Specification auditor · HAZOP</span><span class="sev">medium severity</span></div>
+            <div class="wa-card-body">
+              <p class="lead">What happens if the door is already open when the oven starts?</p>
+              <p class="wa-quote">If DI_oven2_door is OPEN when the oven is enabled, then the system shall prevent startup and report an interlock.</p>
+            </div>
+            <div class="wa-buttons">
+              <button data-action="confirm">Confirm</button>
+              <button data-action="edit">Edit</button>
+              <button data-action="discard">Discard</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 claude text (hidden) -->
+        <div class="wa-row in" id="row-claude-1" hidden>
+          <div class="wa-bubble"><span class="wa-text">Compiled. To activate it on Oven 2, it needs to be loaded through Support Bridge.</span><span class="wa-time">14:03</span></div>
+        </div>
+
+        <!-- 5 bridge card (hidden) -->
+        <div class="wa-row in" id="row-bridge" hidden>
+          <div class="wa-card role-bridge" id="card-bridge">
+            <div class="wa-card-head"><span class="cardlabel">Support Bridge</span></div>
+            <div class="wa-card-body">
+              <p class="lead">Connect the USB cable to Oven 2 and let me know when it is done.</p>
+              <span class="status-pill" id="bridge-status"><span class="d"></span>waiting for physical connection</span>
+            </div>
+            <div class="wa-buttons" id="bridge-buttons">
+              <button data-action="connected">I've connected it</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- technician "connected" (hidden, injected by JS) -->
+        <div class="wa-row out" id="row-tecnico-conecte" hidden>
+          <div class="wa-bubble"><span class="wa-text">Connected ✓</span><span class="wa-time">14:11</span></div>
+        </div>
+
+        <!-- claude final (hidden) -->
+        <div class="wa-row in" id="row-claude-2" hidden>
+          <div class="wa-bubble"><span class="wa-text">Done — Oven 2 is now running with the door interlock active.</span><span class="wa-time">14:13</span></div>
+        </div>
+
+        <div class="wa-divider"><span>Today, later</span></div>
+
+        <!-- voice note -->
+        <div class="wa-row out">
+          <div class="wa-bubble" style="width:78%;">
+            <div class="wa-voice">
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="currentColor" opacity="0.12"/><path d="M9 8L16 12L9 16V8Z" fill="currentColor"/></svg>
+              <span class="wave">
+                <span style="height:6px;"></span><span style="height:12px;"></span><span style="height:8px;"></span><span style="height:16px;"></span><span style="height:10px;"></span><span style="height:14px;"></span><span style="height:7px;"></span><span style="height:11px;"></span><span style="height:9px;"></span><span style="height:15px;"></span>
+              </span>
+              <span class="wa-voice-dur">0:07</span>
+            </div>
+            <div class="wa-transcript"><span class="tl">Automatic transcription</span>hey, drop oven 2 a bit, set it to 175</div>
+            <span class="wa-time">15:40</span>
+          </div>
+        </div>
+
+        <!-- ajuste card -->
+        <div class="wa-row in">
+          <div class="wa-card role-ajuste" id="card-ajuste">
+            <div class="wa-card-head"><span class="cardlabel">Setpoint adjustment · Oven 2</span></div>
+            <div class="wa-card-body">
+              <div class="wa-adjust-row">SP <span class="from">180 °C</span> → <span class="to">175 °C</span></div>
+              <p class="lead">Tuning (Kp/Ti/Td) unchanged — only the setpoint moves.</p>
+            </div>
+            <div class="wa-buttons">
+              <button data-action="confirm">Confirm</button>
+              <button data-action="discard">Discard</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="wa-composer">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C6.6 1.5 5.5 2.6 5.5 4V8C5.5 9.4 6.6 10.5 8 10.5C9.4 10.5 10.5 9.4 10.5 8V4C10.5 2.6 9.4 1.5 8 1.5Z" stroke="currentColor" stroke-width="1.2"/><path d="M3.5 7.5C3.5 10 5.5 12 8 12C10.5 12 12.5 10 12.5 7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M8 12V14.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <span class="input">Type a message</span>
+        <svg viewBox="0 0 16 16" fill="none"><path d="M2 8L14 2L11 14L7 9L2 8Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <!-- ============ NOTES ============ -->
+    <div class="notes">
+      <div>
+        <h2>Three questions closed in this iteration</h2>
+        <span class="notes-sub">carried over as open questions from the Acervus interface definition, section "Conversational chat (WhatsApp)"</span>
+      </div>
+
+      <div class="note-card">
+        <span class="q">Original question: <strong>"How do you reference an existing loop in a long conversation?"</strong></span>
+        <span class="a"><strong>Decision:</strong> a fixed context banner under the header ("Talking about: Oven 2 · temperature"), with a "change" link that opens the machine's loop list. The technician never has to repeat the loop name, and can always see which one they are talking to.</span>
+      </div>
+
+      <div class="note-card">
+        <span class="q">Original question: <strong>"How does a HAZOP finding from the specification auditor look in the thread?"</strong></span>
+        <span class="a"><strong>Decision:</strong> its own bubble, visually distinct from the EARS proposal (amber label, visible severity chip), same Confirm / Edit / Discard button pattern. It is never mixed with Claude's conversational text.</span>
+      </div>
+
+      <div class="note-card">
+        <span class="q">Original question: <strong>"Voice vs text: inline transcription, or assume WhatsApp already handles it?"</strong></span>
+        <span class="a"><strong>Decision:</strong> always show the transcription inline, below the audio. We do not assume the technician (or whoever reads the thread later) will listen to the audio. Voice also triggers the same pipeline as text: here a setpoint adjustment is requested by speaking, not by tapping a button.</span>
+      </div>
+
+      <div class="note-card">
+        <span class="q">Bonus: a new pattern</span>
+        <span class="a">The <strong>setpoint adjustment</strong> card (SP 180→175°C) is different from an EARS proposal: it is "adjustment vocabulary" (continuous tuning), not discrete logic, the same principle already set in the PID blocks document. YAML is never shown on any card, including the HAZOP finding.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="page-foot">
+    <span>Technical chat: same data as Acervus and the faceplate, but the only place where free language is written.</span>
+    <span class="stack">WhatsApp Business API · Cloudflare Worker · Claude Agent SDK</span>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    function reveal(id) { var el = document.getElementById(id); if (el) el.hidden = false; }
+
+    function resolveCard(cardId, action, nextRowId) {
+      var card = document.getElementById(cardId);
+      var buttons = card.querySelector('.wa-buttons');
+      var note = document.createElement('div');
+      if (action === 'confirm') {
+        note.className = 'wa-resolved';
+        note.innerHTML = '<svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.5 12L13 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Confirmed — compiled to block';
+      } else {
+        note.className = 'wa-resolved discarded';
+        note.textContent = 'Discarded';
+      }
+      buttons.replaceWith(note);
+      if (action === 'confirm' && nextRowId) { reveal(nextRowId); }
+    }
+
+    document.getElementById('card-ears').querySelectorAll('button[data-action]').forEach(function (btn) {
+      btn.addEventListener('click', function () { resolveCard('card-ears', btn.dataset.action, 'row-hazop'); });
+    });
+    document.getElementById('card-hazop').querySelectorAll('button[data-action]').forEach(function (btn) {
+      btn.addEventListener('click', function () { resolveCard('card-hazop', btn.dataset.action, 'row-claude-1'); setTimeout(function(){ reveal('row-bridge'); }, 150); });
+    });
+    document.getElementById('card-ajuste').querySelectorAll('button[data-action]').forEach(function (btn) {
+      btn.addEventListener('click', function () { resolveCard('card-ajuste', btn.dataset.action, null); });
+    });
+
+    // Support Bridge handoff
+    document.getElementById('bridge-buttons').querySelector('button').addEventListener('click', function () {
+      document.getElementById('bridge-buttons').replaceWith(document.createTextNode(''));
+      reveal('row-tecnico-conecte');
+      var status = document.getElementById('bridge-status');
+      status.innerHTML = '<span class="d"></span>connected — loading block…';
+      setTimeout(function () {
+        status.className = 'status-pill ready';
+        status.innerHTML = '<span class="d"></span>loaded in bank B · self-test OK';
+        reveal('row-claude-2');
+      }, 1400);
+    });
+
+    // Context banner switcher
+    var ctxChange = document.getElementById('ctx-change');
+    var ctxMenu = document.getElementById('ctx-menu');
+    ctxChange.addEventListener('click', function () { ctxMenu.hidden = !ctxMenu.hidden; });
+    ctxMenu.querySelectorAll('button').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.getElementById('ctx-name').textContent = btn.dataset.name;
+        ctxMenu.hidden = true;
+      });
+    });
+  })();
+</script>
+
+</body></html>

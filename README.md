@@ -2,47 +2,91 @@
 
 # RaraPLC
 
-**Open source industrial PLC built on the STMicroelectronics STM32H743, with an open hardware / open source approach and AI (Claude) integrated into the workflow from day one.**
+**Open hardware industrial PLC on the STM32H743, that speaks the legacy plant (Modbus, OPC-UA, CAN) and robotics (ROS 2) on the same board, and lets a technician change machine logic by describing it, with AI checking the requirement before any code exists.**
 
-**New here?** Read [`docs/POSITIONING.md`](docs/POSITIONING.md) for the fast version: what RaraPLC actually is, how it bridges legacy PLC and robotics, and how AI works inside the project. Five-minute read, written for technical partners and evaluators.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/diagrams/system-architecture-dark.png">
+  <img alt="RaraPLC system architecture" src="docs/assets/diagrams/system-architecture-light.png">
+</picture>
+
+**New here?** [`docs/POSITIONING.md`](docs/POSITIONING.md) is the five-minute version. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) explains the diagram above.
 
 ## What is RaraPLC
 
-RaraPLC is an open hardware and open source firmware industrial PLC, built around the STM32H743 (Arm Cortex-M7). It is designed around three goals at the same time:
+An industrial PLC whose hardware and firmware are open, built around the STM32H743 (Arm Cortex-M7, 480 MHz). It is designed around three goals at the same time:
 
-**1) AI in the firmware/software stack.** Claude is used as a working part of the development pipeline: schematic/PCB review, firmware architecture, code generation and review, documentation. Add-ons are designed to be self-describing so an LLM can write their drivers directly, without an OS driver model: see [`docs/SELF_DESCRIBING_ADDONS.md`](docs/SELF_DESCRIBING_ADDONS.md).
+**1) AI in the firmware/software stack.** Claude is a working part of the development pipeline: schematic and PCB review, firmware architecture, code review, documentation. Add-ons are self-describing so an LLM can write their drivers directly, without an OS driver model: [`docs/SELF_DESCRIBING_ADDONS.md`](docs/SELF_DESCRIBING_ADDONS.md).
 
-**2) AI in machine commissioning and revamping.** A structured workflow for bringing RaraPLC into new machines or migrating (revamping) legacy machines running old, closed-source PLCs, with Claude assisting the integration engineer end to end.
+**2) AI in commissioning and revamping.** Bringing RaraPLC into a new machine, or migrating a machine that runs an old closed PLC, with Claude assisting the technician end to end.
 
-**3) AI as the knowledge base for installed machines.** Every RaraPLC deployment becomes a documented, queryable source of truth (I/O maps, wiring, logic, history) that Claude can reason over for maintenance, diagnostics and future revamps.
+**3) AI as the memory of installed machines.** Every deployment becomes a documented, queryable archive (I/O maps, wiring, logic, history) that Claude can reason over years later.
 
-## Why STM32H743
+## How a technician changes logic
 
-Arm Cortex-M7 core, hardware FPU, up to 2 MB flash / 1 MB RAM: enough headroom for real industrial control loops plus on-device AI inference. Backed by [Arduino_Core_STM32](https://github.com/stm32duino/Arduino_Core_STM32) and the wider STM32duino / STM32Cube ecosystem: mature, actively maintained, open tooling. Rich peripheral set (FDCAN, Ethernet, multiple ADCs/timers) suited to industrial I/O. Full rationale, including what we ruled out and why: [`docs/WHY_STM32H7.md`](docs/WHY_STM32H7.md).
+The technician writes or says what they want. Claude drafts it as EARS requirements, a separate critic agent audits them with HAZOP guide words, the technician confirms, and the result is compiled into data for a fixed C runtime. **The model never writes C that runs in the control loop.** Full pipeline: [`docs/AI_WORKFLOW.md`](docs/AI_WORKFLOW.md).
+
+<table>
+<tr>
+<td width="62%"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/mockups/ears-runtime-dark.png"><img alt="Extended EARS Runtime" src="docs/assets/mockups/ears-runtime-light.png"></picture></td>
+<td width="38%"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/mockups/technician-chat-dark.png"><img alt="Technician chat" src="docs/assets/mockups/technician-chat-light.png"></picture></td>
+</tr>
+<tr>
+<td><sub><b>Extended EARS Runtime</b>: intent → EARS → HAZOP finding → compiled block.</sub></td>
+<td><sub><b>Technician's chat</b>: the same pipeline from a phone. No YAML, ever.</sub></td>
+</tr>
+</table>
+
+## Remote hands, not remote access
+
+The PLC never connects to the internet. For live diagnosis, **RARA Bridge** runs on the technician's own laptop or phone, connected to the board by USB; Claude reads what the technician shares and suggests the next step, but every command is run by the technician. Details: [`docs/SUPPORT_BRIDGE.md`](docs/SUPPORT_BRIDGE.md).
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/mockups/bridge-dark.png">
+  <img alt="RARA Bridge" src="docs/assets/mockups/bridge-light.png">
+</picture>
+
+Everything learned about a machine ends up in **Acervus**, a static, repo-like archive with one project (*Libris*) per machine, fed by closed sessions, never by live telemetry: [`docs/ACERVUS.md`](docs/ACERVUS.md).
+
+The UI images are concept mockups with fictional data; the clickable versions are in [`docs/demos/`](docs/demos/).
+
+## Hardware at a glance
+
+| | Main board |
+|---|---|
+| Compute | STM32H743ZIT6, FreeRTOS, A/B OTA, ROM DFU recovery |
+| I/O | 16 DI opto-isolated, encoder-capable · 16 DO 2 A low-side, STEP/DIR-capable · 8 AI 4–20 mA / 0–10 V |
+| Comms | Ethernet (Modbus TCP, OPC-UA, micro-ROS) · 2× RS-485 · CAN FD · USB-C |
+| Expansion | 40-pin HAT header, Raspberry Pi pinout |
+
+**Stage 2, RARA.MB:** a motion HAT for six closed-loop stepper axes, joint gauges for cobots, and IO-Link to control end effectors. The focus today is getting the PLC running first.
+
+More: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · [`docs/WHY_STM32H7.md`](docs/WHY_STM32H7.md).
 
 ## Open hardware, open source
 
-Hardware is released under CERN-OHL-S v2 (see hardware/LICENSE): strongly reciprocal, same spirit as the GPL, for hardware. Firmware is released under the MIT License (see firmware/LICENSE). Components are selected to be sourceable (LCSC part numbers documented alongside every design) and, where possible, in small/standard packages to keep the design manufacturable by small shops and hobbyists alike.
+Hardware is released under CERN-OHL-S v2 (see `hardware/LICENSE`). Firmware is released under the MIT License (see `firmware/LICENSE`). Components are chosen to be sourceable (LCSC part numbers alongside every design) and, where possible, in small standard packages so small shops and hobbyists can build it too.
 
 ## Project status
 
-Seed stage. This repository is the public entry point for the project: vision, architecture, roadmap, and the firmware skeleton. Hardware design files are being finalized in a private repository and will be published here as they reach a stable, reviewed state: schematics, PCB, BOM and 3D files, transparently, once fabrication-ready.
+Seed stage. The runtime has been running the founder's own food-production machines for about 2,000 hours. The main board schematics are being finalized in KiCad and will be published here, with BOM and 3D files, once they are fabrication-ready.
 
 ## Repository structure
 
-firmware/ : STM32H743 firmware (HAL/Cube + Arduino_Core_STM32 compatible)
-hardware/ : Schematics, PCB, BOM, 3D files (CERN-OHL-S v2)
-docs/ : Architecture, roadmap, design decisions, brand assets
-.github/ : Issue/PR templates, community health files
+```
+firmware/   STM32H743 firmware (HAL/Cube + Arduino_Core_STM32 compatible)
+hardware/   Schematics, PCB, BOM, 3D files (CERN-OHL-S v2)
+docs/       Architecture, AI workflow, design decisions, diagrams, UI demos
+.github/    Issue/PR templates, community health files
+```
 
-## Roadmap (high level)
+## Roadmap
 
-Near-term priorities: publish the v0.1 hardware design (schematics and BOM, with LCSC part numbers); ship a firmware skeleton (HAL bring-up, RTOS choice, IEC 61131-3-inspired logic runtime); document a first revamping case study end to end (legacy machine migration); integrate with the STM32Cube / Arduino_Core_STM32 ecosystem and evaluate the ST Partner Program; and build a ROS 2 bridge for robotics/automation integration.
+See [`docs/ROADMAP.md`](docs/ROADMAP.md). Near term: publish the v0.1 hardware (schematics + BOM with LCSC numbers), the firmware skeleton, and a first revamping case study documented end to end.
 
 ## Contributing
 
-Contributions are welcome, see CONTRIBUTING.md. This project follows the Contributor Covenant (CODE_OF_CONDUCT.md).
+Contributions are welcome, see `CONTRIBUTING.md`. This project follows the Contributor Covenant (`CODE_OF_CONDUCT.md`).
 
 ## About
 
-Built by [Rara Machina](https://github.com/jorgefelipechurio). RaraPLC is an independent, community-driven project and is not affiliated with or endorsed by STMicroelectronics.
+Built by [Rara Machina](https://github.com/jorgefelipechurio). RaraPLC is an independent, community-driven project and is not affiliated with or endorsed by STMicroelectronics or Anthropic.

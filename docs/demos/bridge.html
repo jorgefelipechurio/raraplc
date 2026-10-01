@@ -1,0 +1,637 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RARA Bridge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ---------- tokens (dark-first: this tool is an instrument panel, not a chat) ---------- */
+  :root{
+    --graphite-950:#0b0e11;
+    --graphite-900:#12161a;
+    --graphite-800:#1a2126;
+    --graphite-700:#232b31;
+    --graphite-600:#333d45;
+    --graphite-500:#4c5860;
+    --ink-0:#f1ede4;
+    --ink-1:#cbd0d3;
+    --ink-2:#8c979e;
+    --amber:#e8a33d;
+    --amber-soft:#332711;
+    --amber-line:rgba(232,163,61,.38);
+    --teal:#4bd0da;
+    --teal-soft:#0f2d31;
+    --teal-line:rgba(75,208,218,.35);
+    --ok:#5fbf82;
+    --ok-soft:#12281c;
+    --warn:#e0a53d;
+    --warn-soft:#332711;
+    --critical:#ea6a63;
+    --critical-soft:#331715;
+    --violet:#b48ce8;
+    --border:var(--graphite-600);
+    --shadow:0 10px 28px rgba(0,0,0,.45);
+    --radius:10px;
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --graphite-950:#f4f1ea;
+      --graphite-900:#fffdf9;
+      --graphite-800:#f1ece1;
+      --graphite-700:#e6ded0;
+      --graphite-600:#d0c5ae;
+      --graphite-500:#a89a7d;
+      --ink-0:#221c12;
+      --ink-1:#4a4132;
+      --ink-2:#756a55;
+      --amber:#a5680a;
+      --amber-soft:#f5e3c0;
+      --amber-line:rgba(165,104,10,.4);
+      --teal:#0d7a84;
+      --teal-soft:#dbf0f0;
+      --teal-line:rgba(13,122,132,.32);
+      --ok:#2f8f52;
+      --ok-soft:#e2f3e6;
+      --warn:#a5680a;
+      --warn-soft:#f5e3c0;
+      --critical:#b8362f;
+      --critical-soft:#fbe4e2;
+      --violet:#6d4aa8;
+      color-scheme: light;
+    }
+  }
+  :root[data-theme="light"]{
+    --graphite-950:#f4f1ea;
+    --graphite-900:#fffdf9;
+    --graphite-800:#f1ece1;
+    --graphite-700:#e6ded0;
+    --graphite-600:#d0c5ae;
+    --graphite-500:#a89a7d;
+    --ink-0:#221c12;
+    --ink-1:#4a4132;
+    --ink-2:#756a55;
+    --amber:#a5680a;
+    --amber-soft:#f5e3c0;
+    --amber-line:rgba(165,104,10,.4);
+    --teal:#0d7a84;
+    --teal-soft:#dbf0f0;
+    --teal-line:rgba(13,122,132,.32);
+    --ok:#2f8f52;
+    --ok-soft:#e2f3e6;
+    --warn:#a5680a;
+    --warn-soft:#f5e3c0;
+    --critical:#b8362f;
+    --critical-soft:#fbe4e2;
+    --violet:#6d4aa8;
+    color-scheme: light;
+  }
+  :root[data-theme="dark"]{ color-scheme: dark; }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  :root{padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);}
+  body{
+    background:var(--graphite-950);
+    color:var(--ink-0);
+    font-family:"IBM Plex Sans", system-ui, sans-serif;
+    font-size:14px;
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;}
+  [hidden]{display:none!important;}
+  button{font-family:inherit;}
+  code, .mono{font-family:"IBM Plex Mono", ui-monospace, monospace;}
+
+  a{color:var(--teal);}
+
+  /* ---------- shell ---------- */
+  .app{ max-width:1180px; margin:0 auto; padding:0 20px 24px; }
+
+  .topbar{
+    display:flex; align-items:center; gap:14px;
+    padding:14px 4px 12px;
+    border-bottom:1px solid var(--border);
+    flex-wrap:wrap;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{ width:30px; height:30px; flex:none; }
+  .brand-text{
+    font-family:"IBM Plex Sans Condensed", sans-serif;
+    font-weight:700; font-size:17px; letter-spacing:.2px;
+    color:var(--ink-0);
+  }
+  .brand-text .sub{
+    display:block; font-family:"IBM Plex Mono",monospace; font-weight:500;
+    font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--amber);
+  }
+  .crumb{
+    font-family:"IBM Plex Mono", monospace; font-size:12.5px; color:var(--ink-2);
+    display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+  }
+  .crumb b{ color:var(--ink-0); font-weight:600; }
+  .crumb .sep{ opacity:.5; }
+  .session-pill{
+    font-family:"IBM Plex Mono",monospace; font-size:11.5px; font-weight:500;
+    color:var(--ok); background:var(--ok-soft); border:1px solid color-mix(in srgb, var(--ok) 45%, transparent);
+    padding:3px 9px; border-radius:999px; display:inline-flex; align-items:center; gap:6px;
+  }
+  .session-pill .dot{ width:6px; height:6px; border-radius:50%; background:var(--ok); animation:pulse 2s infinite; }
+  .spacer{ flex:1; }
+  .avatar-chip{
+    width:30px; height:30px; border-radius:50%;
+    background:var(--graphite-700); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:600; color:var(--ink-1);
+  }
+
+  /* ---------- explainer banner ---------- */
+  .how{
+    margin-top:14px; border:1px solid var(--border); border-radius:var(--radius);
+    background:var(--graphite-900); overflow:hidden;
+  }
+  .how-head{
+    display:flex; align-items:center; gap:10px; padding:10px 14px; cursor:pointer;
+    user-select:none;
+  }
+  .how-head svg{ flex:none; color:var(--ink-2); }
+  .how-head .t{ font-weight:600; font-size:13px; flex:1; }
+  .how-head .chev{ color:var(--ink-2); transition:transform .15s; font-size:11px; }
+  .how[open] .how-head .chev{ transform:rotate(90deg); }
+  .how-body{ padding:2px 14px 16px; }
+  .how-diagram{
+    display:grid; grid-template-columns:1fr auto 1fr; gap:10px; align-items:center;
+    margin:6px 0 14px; padding:14px; border:1px dashed var(--border); border-radius:8px;
+    background:var(--graphite-800);
+  }
+  .how-node{ text-align:center; }
+  .how-node .icon{
+    width:40px; height:40px; margin:0 auto 6px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--border); background:var(--graphite-700);
+  }
+  .how-node.board .icon{ color:var(--amber); border-color:var(--amber-line); }
+  .how-node.tech .icon{ color:var(--ink-1); }
+  .how-node.claude .icon{ color:var(--teal); border-color:var(--teal-line); }
+  .how-node .label{ font-size:11.5px; font-weight:600; color:var(--ink-0); }
+  .how-node .sub{ font-size:10.5px; color:var(--ink-2); margin-top:2px; }
+  .how-links{ display:flex; flex-direction:column; align-items:center; gap:18px; }
+  .how-link{ display:flex; align-items:center; gap:6px; font-family:"IBM Plex Mono",monospace; font-size:10px; color:var(--ink-2); white-space:nowrap;}
+  .how-link .line{ width:34px; height:2px; background:var(--amber); border-radius:2px; }
+  .how-link.net .line{ background:var(--teal); }
+  .how-link.gap{ opacity:.55; font-style:italic; }
+  .how p{ margin:0 0 8px; color:var(--ink-1); font-size:13px; }
+  .how p:last-child{ margin-bottom:0; }
+  .how strong{ color:var(--ink-0); }
+
+  /* ---------- main grid ---------- */
+  .bridge-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:14px;
+    margin-top:16px;
+  }
+  .panel{
+    border:1px solid var(--border); border-radius:var(--radius);
+    background:var(--graphite-900);
+    display:flex; flex-direction:column;
+    min-height:520px; max-height:620px;
+    overflow:hidden;
+  }
+  .panel-head{
+    display:flex; align-items:center; gap:8px;
+    padding:10px 14px; border-bottom:1px solid var(--border);
+    font-family:"IBM Plex Mono",monospace; font-size:11.5px; font-weight:600;
+    letter-spacing:.03em; text-transform:uppercase; flex:none;
+  }
+  .panel-head .tag{
+    width:7px; height:7px; border-radius:50%; flex:none;
+  }
+  .cli-panel .panel-head .tag{ background:var(--amber); box-shadow:0 0 0 3px var(--amber-soft); }
+  .claude-panel .panel-head .tag{ background:var(--teal); box-shadow:0 0 0 3px var(--teal-soft); }
+  .panel-head .t{ color:var(--ink-0); flex:1; }
+  .panel-head .via{ color:var(--ink-2); font-weight:500; text-transform:none; letter-spacing:0; font-size:11px; }
+
+  /* CLI panel */
+  .cli-scroll{
+    flex:1; overflow-y:auto; padding:12px 14px;
+    font-family:"IBM Plex Mono",monospace; font-size:12.5px; line-height:1.7;
+    background:
+      repeating-linear-gradient(180deg, rgba(232,163,61,.02) 0px, rgba(232,163,61,.02) 1px, transparent 1px, transparent 26px);
+  }
+  .cli-line{ white-space:pre-wrap; word-break:break-word; margin-bottom:2px; }
+  .cli-line.prompt{ color:var(--amber); }
+  .cli-line.prompt::before{ content:"tech@bridge:~$ "; color:var(--ink-2); }
+  .cli-line.resp{ color:var(--ink-1); }
+  .cli-line.resp.warn{ color:var(--warn); }
+  .cli-line.resp.ok{ color:var(--ok); }
+  .cli-line.resp.crit{ color:var(--critical); }
+  .cli-line.meta{ color:var(--ink-2); font-style:italic; }
+  .cli-caret{
+    display:inline-block; width:7px; height:14px; background:var(--amber);
+    vertical-align:-2px; animation:blink 1s step-end infinite;
+  }
+  .cli-input-row{
+    flex:none; display:flex; align-items:center; gap:8px;
+    padding:10px 14px; border-top:1px solid var(--border); background:var(--graphite-800);
+  }
+  .cli-input-row .prefix{ font-family:"IBM Plex Mono",monospace; color:var(--amber); font-size:12.5px; }
+  .cli-input-row input{
+    flex:1; background:transparent; border:none; outline:none;
+    font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--ink-0);
+  }
+  .cli-input-row input::placeholder{ color:var(--ink-2); }
+  .cli-send{
+    flex:none; border:1px solid var(--amber-line); background:var(--amber-soft); color:var(--amber);
+    font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600;
+    padding:5px 10px; border-radius:6px; cursor:pointer;
+  }
+  .cli-send:hover{ filter:brightness(1.15); }
+
+  /* Claude panel */
+  .claude-thread{ flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:12px; }
+  .c-msg{ max-width:100%; }
+  .c-msg .bubble{
+    background:var(--graphite-800); border:1px solid var(--border);
+    border-radius:10px; padding:10px 12px; font-size:13px; color:var(--ink-1);
+  }
+  .c-msg.from-claude .bubble{ border-color:var(--teal-line); }
+  .c-msg .who{
+    font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink-2);
+    margin-bottom:4px; display:flex; align-items:center; gap:6px;
+  }
+  .c-msg .who .sw{ width:6px; height:6px; border-radius:50%; background:var(--teal); }
+
+  .action-card{
+    border:1px solid var(--teal-line); border-radius:10px; background:var(--teal-soft);
+    padding:12px 13px;
+  }
+  .action-card .role{
+    font-family:"IBM Plex Mono",monospace; font-size:10.5px; font-weight:600;
+    color:var(--teal); text-transform:uppercase; letter-spacing:.04em;
+    margin-bottom:6px; display:flex; align-items:center; gap:6px;
+  }
+  .action-card .role .sw{ width:6px; height:6px; border-radius:50%; background:var(--teal); }
+  .action-card .title{ font-weight:600; color:var(--ink-0); margin-bottom:4px; font-size:13.5px; }
+  .action-card .desc{ color:var(--ink-1); font-size:12.5px; margin-bottom:8px; }
+  .action-card .fact-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-family:"IBM Plex Mono",monospace; font-size:12px;
+    padding:5px 0; border-top:1px dashed var(--border);
+  }
+  .action-card .fact-row:first-of-type{ border-top:none; }
+  .action-card .fact-row .k{ color:var(--ink-2); }
+  .action-card .fact-row .v{ color:var(--ink-0); font-weight:600; }
+  .action-card .fact-row .v.crit{ color:var(--critical); }
+  .action-card .fact-row .v.ok{ color:var(--ok); }
+  .action-card .severity{
+    display:inline-flex; align-items:center; gap:6px; margin-top:8px;
+    font-size:11px; font-weight:600; padding:3px 8px; border-radius:999px;
+  }
+  .action-card .severity.n2{ background:var(--warn-soft); color:var(--warn); border:1px solid color-mix(in srgb, var(--warn) 45%, transparent); }
+  .action-card .btn-row{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .action-card button{
+    border-radius:7px; padding:7px 12px; font-size:12.5px; font-weight:600; cursor:pointer; border:1px solid transparent;
+  }
+  .btn-primary{ background:var(--teal); color:var(--graphite-950); }
+  .btn-primary:hover{ filter:brightness(1.08); }
+  .btn-ghost{ background:transparent; border-color:var(--border); color:var(--ink-1); }
+  .btn-ghost:hover{ border-color:var(--ink-2); }
+  .btn-escalate{ background:transparent; border-color:var(--violet); color:var(--violet); }
+  .action-card.resolved{ opacity:.6; }
+  .action-card.resolved .btn-row{ display:none; }
+  .resolved-tag{
+    margin-top:8px; font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--ok);
+    display:none; align-items:center; gap:6px;
+  }
+  .action-card.resolved .resolved-tag{ display:flex; }
+
+  .c-hint{
+    font-size:11.5px; color:var(--ink-2); text-align:center; padding:4px 0;
+  }
+
+  /* ---------- status strip ---------- */
+  .status-strip{
+    margin-top:14px; border:1px solid var(--border); border-radius:var(--radius);
+    background:var(--graphite-900); box-shadow:var(--shadow);
+    display:grid; grid-template-columns:1fr 1fr 1.3fr; gap:0;
+  }
+  .status-item{
+    padding:12px 16px; display:flex; align-items:center; gap:10px;
+    border-right:1px solid var(--border);
+  }
+  .status-item:last-child{ border-right:none; }
+  .status-item .ic{
+    width:30px; height:30px; border-radius:8px; flex:none;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--border); background:var(--graphite-800);
+  }
+  .status-item .txt .lbl{ font-size:10.5px; color:var(--ink-2); font-family:"IBM Plex Mono",monospace; text-transform:uppercase; letter-spacing:.04em; }
+  .status-item .txt .val{ font-size:13px; font-weight:600; color:var(--ink-0); margin-top:1px; }
+  .status-item.watchdog .ic{ color:var(--ok); border-color:color-mix(in srgb, var(--ok) 40%, transparent); }
+  .status-item.watchdog .val .hb{ display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--ok); margin-right:6px; animation:pulse 2s infinite; }
+  .status-item.control .ic{ color:var(--ink-1); }
+  .status-item.channel{ gap:14px; }
+  .chan-pair{ display:flex; align-items:center; gap:8px; }
+  .chan-node{ display:flex; align-items:center; gap:6px; }
+  .chan-node .ic{ width:26px; height:26px; border-radius:7px; }
+  .chan-node.board .ic{ color:var(--amber); border-color:var(--amber-line); }
+  .chan-node.self .ic{ color:var(--ink-1); }
+  .chan-node.claude .ic{ color:var(--teal); border-color:var(--teal-line); }
+  .chan-node .val{ font-size:12px; }
+  .chan-sep{ font-size:15px; color:var(--ink-2); }
+  .chan-gap{
+    font-family:"IBM Plex Mono",monospace; font-size:9.5px; color:var(--ink-2);
+    display:flex; align-items:center; gap:4px;
+  }
+
+  /* ---------- mobile: inverted hierarchy ---------- */
+  .mob-cli-toggle{ display:none; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+  @keyframes blink{ 0%,50%{opacity:1;} 50.01%,100%{opacity:0;} }
+
+  @media (max-width: 720px){
+    .app{ padding:0 14px 18px; }
+    .topbar{ gap:8px; }
+    .crumb{ order:3; width:100%; }
+    .how-diagram{ grid-template-columns:1fr; }
+    .how-links{ flex-direction:row; transform:rotate(90deg); margin:6px 0; }
+    .how-link{ transform:rotate(-90deg); }
+
+    .bridge-grid{ grid-template-columns:1fr; gap:10px; }
+    /* action card / claude panel promoted to top, full priority */
+    .claude-panel{ order:1; min-height:0; max-height:none; }
+    .claude-thread{ max-height:52vh; }
+    /* raw CLI becomes secondary, collapsible panel below */
+    .cli-panel{ order:2; min-height:0; max-height:none; }
+    .cli-panel .cli-scroll{ max-height:0; padding:0 14px; transition:max-height .2s ease, padding .2s ease; }
+    .cli-panel.expanded .cli-scroll{ max-height:38vh; padding:12px 14px; overflow-y:auto; }
+    .mob-cli-toggle{
+      display:flex; align-items:center; justify-content:center; gap:6px;
+      width:100%; padding:9px; border:none; border-top:1px solid var(--border);
+      background:var(--graphite-800); color:var(--amber);
+      font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600; cursor:pointer;
+    }
+    .cli-panel.expanded .mob-cli-toggle .chev{ transform:rotate(180deg); }
+    .mob-cli-toggle .chev{ transition:transform .15s; }
+
+    .status-strip{ grid-template-columns:1fr; }
+    .status-item{ border-right:none; border-bottom:1px solid var(--border); }
+    .status-item:last-child{ border-bottom:none; }
+    .status-item.channel{ flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" fill="none">
+        <rect x="1" y="1" width="30" height="30" rx="7" fill="var(--graphite-800)" stroke="var(--amber)" stroke-width="1.4"/>
+        <path d="M9 22 L9 10 L15 10 C17.2 10 18.6 11.3 18.6 13.3 C18.6 15 17.5 16.2 15.9 16.5 L19 22" stroke="var(--amber)" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="23.5" cy="22" r="1.5" fill="var(--teal)"/>
+      </svg>
+      <div class="brand-text">RARA Bridge
+        <span class="sub">local tool · technician's device</span>
+      </div>
+    </div>
+    <div class="crumb">
+      <b>Air compressor</b><span class="sep">·</span>Acme Metalworks<span class="sep">·</span>Support Bridge session #044<span class="sep">·</span>Level 2
+    </div>
+    <div class="spacer"></div>
+    <div class="session-pill"><span class="dot"></span>Session active · live</div>
+    <div class="avatar-chip">MR</div>
+  </div>
+
+  <details class="how" id="how">
+    <summary class="how-head" onclick="event.preventDefault(); document.getElementById('how').toggleAttribute('open');">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span class="t">What is RARA Bridge, and why is it not the same as WhatsApp?</span>
+      <span class="chev">▸</span>
+    </summary>
+    <div class="how-body">
+      <div class="how-diagram">
+        <div class="how-node board">
+          <div class="icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h.01M9 15h.01M15 9h6M15 15h6"/></svg>
+          </div>
+          <div class="label">PLC board</div>
+          <div class="sub">Air compressor</div>
+        </div>
+        <div class="how-links">
+          <div class="how-link"><span class="line"></span>USB · CDC‑ACM</div>
+          <div class="how-link gap">no network, no internet</div>
+        </div>
+        <div class="how-node tech">
+          <div class="icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="12" rx="1.5"/><path d="M2 20h20"/></svg>
+          </div>
+          <div class="label">Your laptop / phone</div>
+          <div class="sub">runs this app (PWA)</div>
+        </div>
+      </div>
+      <p><strong>Two separate connections that never touch.</strong> The board's serial port connects over <strong>direct USB</strong> to your device (Web Serial on desktop, or the Android app with WebUSB) — that never reaches the internet. Your device, separately, talks to Claude over <strong>your own data connection</strong> — that never enters the plant network. The board has no internet access, and never has.</p>
+      <p><strong>WhatsApp is the conversation channel</strong> with Claude (the same thread you use for everything, support included). <strong>RARA Bridge is the tool you open here</strong> when the session needs a live view of the board CLI — what you see below. Claude never runs anything on the board: you run the commands, and Claude only reads what you share and suggests the next step.</p>
+    </div>
+  </details>
+
+  <main class="bridge-grid">
+
+    <section class="panel cli-panel" id="cliPanel">
+      <div class="panel-head">
+        <span class="tag"></span>
+        <span class="t">Raw CLI</span>
+        <span class="via">via direct USB to the board</span>
+      </div>
+      <div class="cli-scroll" id="cliScroll">
+        <div class="cli-line meta">— port connected: /dev/ttyACM0 · CDC-ACM · 115200 8N1 —</div>
+        <div class="cli-line prompt">status auditor</div>
+        <div class="cli-line resp">aud_compressor_start · mode: BLOCKED</div>
+        <div class="cli-line resp warn">interlock[DI3_ext_estop] = 0  (expected: 1)</div>
+        <div class="cli-line resp">interlock[DI1_overtemp] = 1</div>
+        <div class="cli-line resp">interlock[DI2_max_pressure] = 1</div>
+        <div class="cli-line resp">rate_limit_start: ok</div>
+        <div class="cli-line meta">— 3 rules active, 1 failing —</div>
+
+        <div class="cli-line prompt" id="ln-di3">get DI3 --raw</div>
+        <div class="cli-line resp crit" id="ln-di3-resp" hidden>DI3 = 0V (floating) · internal pull-up active · no continuity across X12.3‑X12.4</div>
+
+        <div class="cli-line prompt" id="ln-recheck" hidden>status auditor</div>
+        <div class="cli-line resp ok" id="ln-recheck-resp" hidden>aud_compressor_start · mode: NORMAL · all 3 rules OK</div>
+        <div class="cli-line meta" id="ln-close" hidden>— session closed by technician · finding archived on the project board —</div>
+      </div>
+      <button class="mob-cli-toggle" id="mobToggle" onclick="toggleMobileCli()">
+        <span id="mobToggleLabel">Ver Raw CLI</span><span class="chev">▾</span>
+      </button>
+      <div class="cli-input-row">
+        <span class="prefix">$</span>
+        <input type="text" placeholder="serial command (only you can send it)…" disabled>
+        <button class="cli-send" disabled>Send</button>
+      </div>
+    </section>
+
+    <section class="panel claude-panel">
+      <div class="panel-head">
+        <span class="tag"></span>
+        <span class="t">Claude — reasoning</span>
+        <span class="via">via your internet connection</span>
+      </div>
+      <div class="claude-thread" id="thread">
+
+        <div class="c-msg from-claude">
+          <div class="who"><span class="sw"></span>Claude</div>
+          <div class="bubble">I see on the board that you reported "compressor won't start, screen in blocked mode". To confirm the cause, run <code>status auditor</code> and paste the output here or in the CLI on the left.</div>
+        </div>
+
+        <div class="c-msg">
+          <div class="who">You</div>
+          <div class="bubble">ran it, DI3 shows 0</div>
+        </div>
+
+        <div class="action-card" id="card-diag">
+          <div class="role"><span class="sw"></span>Diagnosis</div>
+          <div class="title">Interlock DI3 (external emergency stop) open</div>
+          <div class="desc">The auditor is correctly blocking the start — this is not an auditor fault; the physical input is in the stop state.</div>
+          <div class="fact-row"><span class="k">Rule</span><span class="v">aud_compressor_start</span></div>
+          <div class="fact-row"><span class="k">Interlock</span><span class="v crit">DI3_ext_estop = 0</span></div>
+          <div class="fact-row"><span class="k">Expected</span><span class="v ok">1 (circuit closed)</span></div>
+          <span class="severity n2">Level 2 · wiring fix, not a software fix</span>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="runDiag()">Request raw DI3 reading</button>
+            <button class="btn-escalate" onclick="escalate('card-diag')">Escalate to Level 3</button>
+          </div>
+          <div class="resolved-tag">✓ raw read requested</div>
+        </div>
+
+        <div class="c-hint" id="hint-diag" hidden>Running <code>get DI3 --raw</code> in the CLI on the left…</div>
+
+        <div class="action-card" id="card-fix" hidden>
+          <div class="role"><span class="sw"></span>Suggestion</div>
+          <div class="title">Check continuity across terminal X12.3–X12.4</div>
+          <div class="desc">The input is floating (0V with pull-up active), not shorted to ground — consistent with a loose wire or an unclosed contact on the external emergency-stop mushroom button. Physically inspect the terminal before touching anything in software.</div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="confirmFix()">Checked — it is closed now</button>
+            <button class="btn-ghost" onclick="escalate('card-fix')">Still open, escalating</button>
+          </div>
+          <div class="resolved-tag">✓ confirmed by technician</div>
+        </div>
+
+        <div class="c-msg from-claude" id="msg-close" hidden>
+          <div class="who"><span class="sw"></span>Claude</div>
+          <div class="bubble">Auditor re-read: all 3 rules OK, mode NORMAL. Closing the session — the finding (interlock DI3, terminal X12.3‑X12.4) is archived on the <b>Air compressor</b> board for future reference.</div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <div class="status-strip">
+    <div class="status-item watchdog">
+      <div class="ic">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+      </div>
+      <div class="txt">
+        <div class="lbl">Watchdog</div>
+        <div class="val"><span class="hb"></span>heartbeat every 2s · last 1s ago</div>
+      </div>
+    </div>
+    <div class="status-item control">
+      <div class="ic">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 3 7v6c0 5 4 8.5 9 9 5-.5 9-4 9-9V7l-9-5Z"/></svg>
+      </div>
+      <div class="txt">
+        <div class="lbl">Control</div>
+        <div class="val">Technician (manual) · Claude only suggests</div>
+      </div>
+    </div>
+    <div class="status-item channel">
+      <div class="ic">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h16M4 12l4-4M4 12l4 4M20 12l-4-4M20 12l-4 4"/></svg>
+      </div>
+      <div class="chan-pair">
+        <div class="chan-node board">
+          <span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/></svg></span>
+          <span class="val">Board</span>
+        </div>
+        <span class="chan-sep">—</span>
+        <div class="chan-gap">direct USB</div>
+        <span class="chan-sep">—</span>
+        <div class="chan-node self">
+          <span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="12" rx="1.5"/></svg></span>
+          <span class="val">Your device</span>
+        </div>
+        <span class="chan-sep">···</span>
+        <div class="chan-gap">your data connection</div>
+        <span class="chan-sep">···</span>
+        <div class="chan-node claude">
+          <span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg></span>
+          <span class="val">Claude</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function toggleMobileCli(){
+    const p = document.getElementById('cliPanel');
+    p.classList.toggle('expanded');
+    document.getElementById('mobToggleLabel').textContent =
+      p.classList.contains('expanded') ? 'Hide raw CLI' : 'Show raw CLI';
+    if(p.classList.contains('expanded')){
+      document.getElementById('cliScroll').scrollTop = document.getElementById('cliScroll').scrollHeight;
+    }
+  }
+
+  function scrollCli(){
+    const s = document.getElementById('cliScroll');
+    s.scrollTop = s.scrollHeight;
+  }
+  function scrollThread(){
+    const t = document.getElementById('thread');
+    t.scrollTop = t.scrollHeight;
+  }
+
+  function runDiag(){
+    const card = document.getElementById('card-diag');
+    card.classList.add('resolved');
+    document.getElementById('hint-diag').hidden = false;
+    document.getElementById('ln-di3-resp').hidden = false;
+    scrollCli();
+    setTimeout(()=>{
+      document.getElementById('card-fix').hidden = false;
+      scrollThread();
+    }, 900);
+  }
+
+  function confirmFix(){
+    const card = document.getElementById('card-fix');
+    card.classList.add('resolved');
+    document.getElementById('ln-recheck').hidden = false;
+    document.getElementById('ln-recheck-resp').hidden = false;
+    document.getElementById('ln-close').hidden = false;
+    scrollCli();
+    setTimeout(()=>{
+      document.getElementById('msg-close').hidden = false;
+      scrollThread();
+    }, 700);
+  }
+
+  function escalate(cardId){
+    const card = document.getElementById(cardId);
+    const tag = card.querySelector('.resolved-tag');
+    tag.textContent = '↗ escalated to Level 3 — human in the loop';
+    tag.style.color = 'var(--violet)';
+    card.classList.add('resolved');
+  }
+</script>
+</body>
+</html>
+
+</body></html>

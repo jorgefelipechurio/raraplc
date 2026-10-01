@@ -41,5 +41,6 @@ Inside that ecosystem, AI is the sherpa. It is what a new contributor, a plant e
 ## See also
 
 Project overview and repository structure: `README.md`. Roadmap: `docs/ROADMAP.md`. System architecture: `docs/ARCHITECTURE.md`. How to contribute: `CONTRIBUTING.md`.
- Why STM32H7 was chosen as the core: [`docs/WHY_STM32H7.md`](docs/WHY_STM32H7.md).
- Self-describing add-ons and LLM-synthesized drivers: [`docs/SELF_DESCRIBING_ADDONS.md`](docs/SELF_DESCRIBING_ADDONS.md).
+ Why STM32H7 was chosen as the core: [`docs/WHY_STM32H7.md`](WHY_STM32H7.md).
+ Self-describing add-ons and LLM-synthesized drivers: [`docs/SELF_DESCRIBING_ADDONS.md`](SELF_DESCRIBING_ADDONS.md).
+ AI workflow (EARS + HAZOP, generator/critic): [`AI_WORKFLOW.md`](AI_WORKFLOW.md). Live diagnosis without internet on the PLC: [`SUPPORT_BRIDGE.md`](SUPPORT_BRIDGE.md). Machine archive: [`ACERVUS.md`](ACERVUS.md).
