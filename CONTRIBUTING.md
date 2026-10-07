@@ -4,7 +4,7 @@ Thanks for your interest in contributing to RaraPLC, an open source industrial P
 
 ## Ways to contribute
 
-**Firmware:** improvements to the control firmware, drivers, examples, and tooling live under `firmware/` and are MIT licensed.
+**Firmware:** improvements to the control firmware, drivers, examples, and tooling live under `firmware/` and are licensed under MPL-2.0.
 
 **Hardware:** schematic reviews, layout suggestions, and BOM improvements for content under `hardware/` are welcome; that folder is licensed under CERN-OHL-S v2.
 
@@ -18,7 +18,7 @@ For anything beyond a small fix, open an issue first to discuss the approach. Th
 
 ## License of contributions
 
-By submitting a pull request, you agree that your contribution is licensed under the same license as the folder it modifies: MIT for `firmware/`, CERN-OHL-S v2 for `hardware/`. Contributions to `docs/` and other project files are licensed under MIT unless stated otherwise.
+By submitting a pull request, you agree that your contribution is licensed under the same license as the folder it modifies: MPL-2.0 for `firmware/`, CERN-OHL-S v2 for `hardware/`. Contributions to `docs/` and other project files are licensed under MIT unless stated otherwise.
 
 ## Pull requests
 

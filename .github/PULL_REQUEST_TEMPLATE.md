@@ -11,4 +11,4 @@ Firmware / Hardware / Docs / Other (delete as appropriate)
 I have read CONTRIBUTING.md.
 I have tested this change where applicable (build, simulation, or on hardware).
 I have updated relevant documentation (README, ARCHITECTURE.md, ROADMAP.md) if needed.
-I understand this contribution will be licensed under the same license as the folder it touches (MIT for firmware/, CERN-OHL-S v2 for hardware/).
+I understand this contribution will be licensed under the same license as the folder it touches (MPL-2.0 for firmware/, CERN-OHL-S v2 for hardware/).

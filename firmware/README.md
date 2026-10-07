@@ -15,4 +15,4 @@ Status: seed stage. First skeleton published (C, HAL, FreeRTOS):
 
 Clock tree, peripheral init and the FreeRTOS port come from STM32CubeMX / STM32CubeH7.
 
-License: MIT (see LICENSE in this folder).
+License: Mozilla Public License 2.0 (see LICENSE in this folder). File-level copyleft: if you distribute modified versions of these files, publish those changes; your own new files (machine logic, add-on modules) can stay under any license.

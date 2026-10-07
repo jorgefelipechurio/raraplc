@@ -6,7 +6,11 @@
  * terminal to the MCU pin (numbering of 2026-10-01). Each terminal block reads
  * right-to-left, in increasing order, when the board is seen from the front.
  *
- * SPDX-License-Identifier: MIT
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 #ifndef RARA_BOARD_PINS_H
 #define RARA_BOARD_PINS_H

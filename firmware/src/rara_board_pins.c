@@ -2,7 +2,11 @@
  * @file    rara_board_pins.c
  * @brief   RaraPLC main board Rev 1.0 pin tables (see rara_board_pins.h).
  *
- * SPDX-License-Identifier: MIT
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 #include "rara_board_pins.h"
 

@@ -54,4 +54,4 @@ Every add-on describes itself so the runtime, and an LLM, can tell what is attac
 
 ## Open hardware / open source boundary
 
-Hardware (schematics, PCB, BOM, 3D files) is licensed under CERN-OHL-S v2. Firmware is licensed under MIT. The two live in separate folders with separate LICENSE files so each can be reused under its own terms.
+Hardware (schematics, PCB, BOM, 3D files) is licensed under CERN-OHL-S v2. Firmware is licensed under MPL-2.0 (file-level copyleft: changes to RaraPLC's files are shared back; new files built on top can use any license). The two live in separate folders with separate LICENSE files so each can be reused under its own terms.

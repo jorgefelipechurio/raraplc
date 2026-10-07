@@ -2,7 +2,11 @@
  * @file    rara_io.h
  * @brief   Process image and scan-cycle hooks for the RaraPLC runtime.
  *
- * SPDX-License-Identifier: MIT
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 #ifndef RARA_IO_H
 #define RARA_IO_H
