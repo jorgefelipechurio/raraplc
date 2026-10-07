@@ -9,7 +9,11 @@
  * Encoder channels need the DI software debounce set to 0 ms.
  * While ENC1 is active, SWO on the STDC14 connector is not available (PB3).
  *
- * SPDX-License-Identifier: MIT
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 #ifndef RARA_ENCODER_H
 #define RARA_ENCODER_H

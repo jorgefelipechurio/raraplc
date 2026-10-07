@@ -64,7 +64,7 @@ More: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · [`docs/WHY_STM32H7.md`](
 
 ## Open hardware, open source
 
-Hardware is released under CERN-OHL-S v2 (see `hardware/LICENSE`). Firmware is released under the MIT License (see `firmware/LICENSE`). Components are chosen to be sourceable (LCSC part numbers alongside every design) and, where possible, in small standard packages so small shops and hobbyists can build it too.
+Hardware is released under CERN-OHL-S v2 (see `hardware/LICENSE`). Firmware is released under the Mozilla Public License 2.0 (see `firmware/LICENSE`): improvements to the runtime's own files must be shared back, while your own application code and add-on modules on top can stay private. Components are chosen to be sourceable (LCSC part numbers alongside every design) and, where possible, in small standard packages so small shops and hobbyists can build it too.
 
 ## Main board, Rev 1.0
 
