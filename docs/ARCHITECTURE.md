@@ -19,7 +19,7 @@ Editable source: [`assets/diagrams/system-architecture.svg`](assets/diagrams/sys
 
 ## Main board
 
-<img alt="RaraPLC main board Rev 1.0, 3D render (top view)" src="assets/pcb-rev1.0/raraplc-rev1.0-3d.png">
+<img alt="RaraPLC main board Rev 1.1, 3D render (top view)" src="assets/pcb-rev1.1/raraplc-rev1.1-3d.png">
 
 | Block | What it is | Why |
 |---|---|---|

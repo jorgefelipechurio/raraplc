@@ -66,9 +66,9 @@ More: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · [`docs/WHY_STM32H7.md`](
 
 Hardware is released under CERN-OHL-S v2 (see `hardware/LICENSE`). Firmware is released under the Mozilla Public License 2.0 (see `firmware/LICENSE`): improvements to the runtime's own files must be shared back, while your own application code and add-on modules on top can stay private. Components are chosen to be sourceable (LCSC part numbers alongside every design) and, where possible, in small standard packages so small shops and hobbyists can build it too.
 
-## Main board, Rev 1.0
+## Main board, Rev 1.1
 
-<img alt="RaraPLC main board Rev 1.0, 3D render (top view)" src="docs/assets/pcb-rev1.0/raraplc-rev1.0-3d.png">
+<img alt="RaraPLC main board Rev 1.1, 3D render (top view)" src="docs/assets/pcb-rev1.1/raraplc-rev1.1-3d.png">
 
 STM32H743 main board, 3D render from KiCad. 16 DI, 16 DO, 8 AI, Ethernet, 2× RS-485, CAN FD, USB-C and a 40-pin HAT header.
 
