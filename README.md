@@ -26,7 +26,7 @@ It gives every machine a memory, an identity and an AI that can read both.
 
 ## The suite
 
-<img alt="RARA PLC suite: each machine has an Ex Libris, the user has Acervus, AI reaches both through MCP" src="docs/assets/diagrams/suite.png">
+<img alt="RARA PLC suite: each machine has an Ex Libris, the user has Acervus, AI reaches both through MCP" src="docs/assets/diagrams/suite.svg">
 
 | Component | What it does | Belongs to |
 |---|---|---|
@@ -77,7 +77,7 @@ The MCP server is specified. It is not implemented yet.
 
 We publish everything an integrator needs to trust, wire, repair and integrate Ex Libris. We keep closed what would let someone clone it, and what runs the service.
 
-<img alt="RARA PLC licensing by layer" src="docs/assets/diagrams/licensing.png">
+<img alt="RARA PLC licensing by layer" src="docs/assets/diagrams/licensing.svg">
 
 Full table and rules: [`LICENSE.md`](LICENSE.md).
 

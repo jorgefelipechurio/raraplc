@@ -3,7 +3,7 @@
 RARA PLC is licensed **by layer**: open where it connects, closed where it's copied.
 We publish what an integrator needs to trust, wire, repair and integrate. We keep closed what would let someone clone the module, and what runs the service.
 
-![Licensing by layer](docs/assets/diagrams/licensing.png)
+![Licensing by layer](docs/assets/diagrams/licensing.svg)
 
 ## Layers
 
