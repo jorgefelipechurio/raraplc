@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="1024" height="1024">
+  <title>RARA PLC – gato con anteojos</title>
+  <!-- Paleta original: fondo #1F5C4D, gato #F5F0E6, acento cobre #C1622E -->
+  <rect width="128" height="128" fill="#1F5C4D"/>
+
+  <!-- Bigotes (cables con terminal de cobre) -->
+  <g stroke="#F5F0E6" stroke-width="2.6" stroke-linecap="round">
+    <line x1="12" y1="62.5" x2="34" y2="70"/>
+    <line x1="9.5" y1="79" x2="34" y2="79"/>
+    <line x1="12" y1="95.5" x2="34" y2="88"/>
+    <line x1="116" y1="62.5" x2="94" y2="70"/>
+    <line x1="118.5" y1="79" x2="94" y2="79"/>
+    <line x1="116" y1="95.5" x2="94" y2="88"/>
+  </g>
+  <g fill="#C1622E">
+    <circle cx="11.5" cy="62.5" r="3"/>
+    <circle cx="9.5" cy="79" r="3"/>
+    <circle cx="11.5" cy="95.5" r="3"/>
+    <circle cx="116.5" cy="62.5" r="3"/>
+    <circle cx="118.5" cy="79" r="3"/>
+    <circle cx="116.5" cy="95.5" r="3"/>
+  </g>
+
+  <!-- Cabeza + orejas -->
+  <g fill="#F5F0E6">
+    <circle cx="64" cy="77.5" r="34.5"/>
+    <polygon points="31,20.5 58,41 70,41 97,20.5 90,56 38,56"/>
+  </g>
+
+  <!-- Ojos -->
+  <g fill="#1F5C4D">
+    <circle cx="51" cy="72" r="5.4"/>
+    <circle cx="77" cy="72" r="5.4"/>
+    <!-- Nariz -->
+    <polygon points="58,86 70,86 64,92.5"/>
+  </g>
+
+  <!-- Anteojos redondos (montura cobre) -->
+  <g fill="none" stroke="#C1622E" stroke-width="2.4" stroke-linecap="round">
+    <circle cx="51" cy="72" r="9.6"/>
+    <circle cx="77" cy="72" r="9.6"/>
+    <!-- Puente -->
+    <path d="M60.4 70.2 Q64 67.4 67.6 70.2"/>
+    <!-- Patillas hacia las orejas -->
+    <line x1="41.6" y1="70" x2="32.5" y2="66.5"/>
+    <line x1="86.4" y1="70" x2="95.5" y2="66.5"/>
+  </g>
+</svg>

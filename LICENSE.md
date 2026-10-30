@@ -30,7 +30,7 @@ We publish what an integrator needs to trust, wire, repair and integrate. We kee
 | Content | License |
 |---|---|
 | README, `docs/` text and diagrams | CC BY 4.0 |
-| Rara Cat and RARA logos (`docs/assets/rara-cat-*`, `docs/assets/rara_cat_logo.svg`) | Reserved trademark (layer M) |
+| Rara Cat and RARA logos (`docs/assets/rara-cat-*`) | Reserved trademark (layer M) |
 | Future folders (`specs/`, `host/`, `hardware-docs/`) | The layer license above, stated again in a `LICENSE` file inside each folder |
 
 Board silkscreen on every Ex Libris:

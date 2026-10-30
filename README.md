@@ -1,4 +1,4 @@
-<img alt="Rara Cat" src="docs/assets/rara-cat-128.png" width="96">
+<img alt="Rara Cat with glasses, the RARA PLC mascot" src="docs/assets/rara-cat-anteojos.svg" width="96">
 
 # RARA PLC
 
