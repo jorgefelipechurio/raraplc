@@ -41,7 +41,7 @@ It gives every machine a memory, an identity and an AI that can read both.
 
 Ex Libris is the hardware piece of RARA PLC. It plugs into the PLC that already runs the machine, over **I2C**:
 
-- **Arduino Portenta Machine Control:** the front Grove connector. No need to open the controller.
+- **Arduino Portenta Machine Control:** the Portenta expansion port.
 - **Arduino Opta:** the expansion port. Nothing to solder.
 
 What it keeps:
