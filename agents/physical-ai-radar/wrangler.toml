@@ -1,0 +1,36 @@
+name = "physical-ai-radar"
+main = "src/index.ts"
+compatibility_date = "2026-10-15"
+
+# Escucha diaria (07:00 ART) y síntesis + mail los lunes (08:30 ART). Deben coincidir con src/index.ts.
+[triggers]
+crons = ["0 10 * * *", "30 11 * * 1"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "physical-ai-radar"
+database_id = "39317198-eed8-4b9d-923a-f7b5e8849b5f"
+migrations_dir = "migrations"
+
+# Mail semanal con Cloudflare Email Service. Gratis hacia una dirección verificada en Email Routing.
+# Requisitos: un dominio tuyo en Cloudflare DNS con Email Routing activo, y TO_ADDRESS verificada ahí.
+# Sin restricción de destino: solo puede mandar a direcciones verificadas de la cuenta.
+[[send_email]]
+name = "EMAIL"
+
+[vars]
+CLASSIFY_MODEL = "claude-haiku-5-5"
+SYNTH_MODEL = "claude-sonnet-5-5"
+# Tope total USD 5/mes; USD 0.50 reservados para que la síntesis de los lunes siempre tenga presupuesto.
+MONTHLY_USD_CAP = "5"
+DAILY_USD_CAP = "0.4"
+SYNTH_RESERVE_USD = "0.5"
+MAX_ITEMS_PER_RUN = "120"
+BATCH_SIZE = "10"
+# Completar con una dirección de tu dominio en Cloudflare, p. ej. "radar@tudominio.com".
+FROM_ADDRESS = ""
+
+# Secretos (no van acá):
+#   npx wrangler secret put ANTHROPIC_API_KEY
+#   npx wrangler secret put READ_TOKEN
+#   npx wrangler secret put TO_ADDRESS     (tu casilla; fuera del repo público)
