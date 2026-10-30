@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" font-family="Inter,Segoe UI,Helvetica,Arial,sans-serif">
+<rect width="1200" height="800" fill="#fff"/>
+<rect x="20" y="20" width="570" height="560" rx="14" fill="#f6fbf7" stroke="#2e7d4f" stroke-width="2"/>
+<text x="44" y="56" font-size="21" font-weight="700" fill="#2e7d4f">OPEN — where it connects</text>
+<text x="44" y="80" font-size="15" font-style="italic" fill="#2e7d4f">Anyone can read it, use it, build on it</text>
+<rect x="44" y="94" width="522" height="148" rx="10" fill="#e3f3e8" stroke="#2e7d4f" stroke-width="2"/>
+<text x="60" y="122" font-size="13" font-weight="700" fill="#2e7d4f">H1 · HARDWARE DOCS</text>
+<text x="60" y="146" font-size="18" font-weight="700" fill="#334">Schematic, pinout, datasheet, 3D model</text>
+<text x="60" y="170" font-size="14.5" fill="#334">Everything you need to wire, mount and repair it.</text>
+<rect x="56" y="206" width="498" height="26" rx="6" fill="#ffffff" stroke="#2e7d4f" stroke-width="1"/>
+<text x="305.0" y="224" font-size="14" font-weight="700" text-anchor="middle" fill="#2e7d4f">CC BY-SA 4.0</text>
+<rect x="44" y="256" width="522" height="148" rx="10" fill="#e3f3e8" stroke="#2e7d4f" stroke-width="2"/>
+<text x="60" y="284" font-size="13" font-weight="700" fill="#2e7d4f">S1 · INTERFACE SPECS</text>
+<text x="60" y="308" font-size="18" font-weight="700" fill="#334">I2C &amp; USB protocols, machine.json, MCP spec</text>
+<text x="60" y="332" font-size="14.5" fill="#334">Anyone can talk to Ex Libris — even in closed products.</text>
+<rect x="56" y="368" width="498" height="26" rx="6" fill="#ffffff" stroke="#2e7d4f" stroke-width="1"/>
+<text x="305.0" y="386" font-size="14" font-weight="700" text-anchor="middle" fill="#2e7d4f">CC BY 4.0  ·  Apache-2.0</text>
+<rect x="44" y="418" width="522" height="148" rx="10" fill="#e3f3e8" stroke="#2e7d4f" stroke-width="2"/>
+<text x="60" y="446" font-size="13" font-weight="700" fill="#2e7d4f">S2 · HOST CODE</text>
+<text x="60" y="470" font-size="18" font-weight="700" fill="#334">Arduino / Zephyr library, local MCP server, CLI</text>
+<text x="60" y="494" font-size="14.5" fill="#334">The code that runs on your PLC and your laptop.</text>
+<rect x="56" y="530" width="498" height="26" rx="6" fill="#ffffff" stroke="#2e7d4f" stroke-width="1"/>
+<text x="305.0" y="548" font-size="14" font-weight="700" text-anchor="middle" fill="#2e7d4f">MPL-2.0</text>
+<rect x="610" y="20" width="570" height="560" rx="14" fill="#fdf7f7" stroke="#a33a3a" stroke-width="2"/>
+<text x="634" y="56" font-size="21" font-weight="700" fill="#a33a3a">CLOSED — where it's copied</text>
+<text x="634" y="80" font-size="15" font-style="italic" fill="#a33a3a">What keeps clones out and the service alive</text>
+<rect x="634" y="94" width="522" height="148" rx="10" fill="#f8e6e6" stroke="#a33a3a" stroke-width="2"/>
+<text x="650" y="122" font-size="13" font-weight="700" fill="#a33a3a">H2 · HARDWARE DESIGN</text>
+<text x="650" y="146" font-size="18" font-weight="700" fill="#334">KiCad sources, Gerbers, pick &amp; place, costed BOM</text>
+<text x="650" y="170" font-size="14.5" fill="#334">Shared only with the manufacturer, under NDA.</text>
+<rect x="646" y="206" width="498" height="26" rx="6" fill="#ffffff" stroke="#a33a3a" stroke-width="1"/>
+<text x="895.0" y="224" font-size="14" font-weight="700" text-anchor="middle" fill="#a33a3a">All rights reserved</text>
+<rect x="634" y="256" width="522" height="148" rx="10" fill="#f8e6e6" stroke="#a33a3a" stroke-width="2"/>
+<text x="650" y="284" font-size="13" font-weight="700" fill="#a33a3a">S3 · MODULE FIRMWARE</text>
+<text x="650" y="308" font-size="18" font-weight="700" fill="#334">Bootloader, runtime, crypto</text>
+<text x="650" y="332" font-size="14.5" fill="#334">Shipped only as a signed binary.</text>
+<rect x="646" y="368" width="498" height="26" rx="6" fill="#ffffff" stroke="#a33a3a" stroke-width="1"/>
+<text x="895.0" y="386" font-size="14" font-weight="700" text-anchor="middle" fill="#a33a3a">Proprietary  ·  EULA</text>
+<rect x="634" y="418" width="522" height="148" rx="10" fill="#f8e6e6" stroke="#a33a3a" stroke-width="2"/>
+<text x="650" y="446" font-size="13" font-weight="700" fill="#a33a3a">S4 · SERVICES</text>
+<text x="650" y="470" font-size="18" font-weight="700" fill="#334">Acervus, Rara Bridge, remote MCP</text>
+<text x="650" y="494" font-size="14.5" fill="#334">Hosted by RARA.</text>
+<rect x="646" y="530" width="498" height="26" rx="6" fill="#ffffff" stroke="#a33a3a" stroke-width="1"/>
+<text x="895.0" y="548" font-size="14" font-weight="700" text-anchor="middle" fill="#a33a3a">Proprietary  ·  Terms of use</text>
+<rect x="20" y="600" width="373" height="180" rx="10" fill="#e6eefb" stroke="#2f5fa8" stroke-width="2"/>
+<text x="36" y="628" font-size="13" font-weight="700" fill="#2f5fa8">D · YOUR DATA</text>
+<text x="36" y="652" font-size="18" font-weight="700" fill="#334">Machine records &amp; your knowledge</text>
+<text x="36" y="676" font-size="14.5" fill="#334">Yours. Open formats.</text>
+<text x="36" y="696" font-size="14.5" fill="#334">Always exportable.</text>
+<rect x="32" y="744" width="349" height="26" rx="6" fill="#ffffff" stroke="#2f5fa8" stroke-width="1"/>
+<text x="206.5" y="762" font-size="14" font-weight="700" text-anchor="middle" fill="#2f5fa8">Owned by you</text>
+<rect x="413" y="600" width="373" height="180" rx="10" fill="#fdf3d6" stroke="#a07800" stroke-width="2"/>
+<text x="429" y="628" font-size="13" font-weight="700" fill="#a07800">S5 · THE SIGNATURE</text>
+<text x="429" y="652" font-size="18" font-weight="700" fill="#334">Genuine modules only</text>
+<text x="429" y="676" font-size="14.5" fill="#334">Support and warranty only for</text>
+<text x="429" y="696" font-size="14.5" fill="#334">genuine modules &amp; signed firmware.</text>
+<rect x="425" y="744" width="349" height="26" rx="6" fill="#ffffff" stroke="#a07800" stroke-width="1"/>
+<text x="599.5" y="762" font-size="14" font-weight="700" text-anchor="middle" fill="#a07800">Genuine only</text>
+<rect x="806" y="600" width="374" height="180" rx="10" fill="#f1f2f4" stroke="#555" stroke-width="2"/>
+<text x="822" y="628" font-size="13" font-weight="700" fill="#555">M · BRAND</text>
+<text x="822" y="652" font-size="18" font-weight="700" fill="#334">RARA · Ex Libris · Rara Cat</text>
+<text x="822" y="676" font-size="14.5" fill="#334">Say "compatible with RARA Ex Libris".</text>
+<text x="822" y="696" font-size="14.5" fill="#334">Anything else, ask first.</text>
+<rect x="818" y="744" width="350" height="26" rx="6" fill="#ffffff" stroke="#555" stroke-width="1"/>
+<text x="993.0" y="762" font-size="14" font-weight="700" text-anchor="middle" fill="#555">Reserved trademark</text>
+</svg>

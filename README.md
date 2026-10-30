@@ -1,98 +1,97 @@
-![Rara Cat, mascota de RaraPLC](docs/assets/rara-cat-128.png)
+<img alt="Rara Cat" src="docs/assets/rara-cat-128.png" width="96">
 
-# RaraPLC
+# RARA PLC
 
-**Open hardware industrial PLC on the STM32H743, that speaks the legacy plant (Modbus, OPC-UA, CAN) and robotics (ROS 2) on the same board, and lets a technician change machine logic by describing it, with AI checking the requirement before any code exists.**
+**Your machine works. Nobody remembers how.**
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/diagrams/system-architecture-dark.png">
-  <img alt="RaraPLC system architecture" src="docs/assets/diagrams/system-architecture-light.png">
-</picture>
+The integrator left. The docs are lost. The program on the PLC doesn't match any backup.
+When the machine stops, someone starts from zero.
 
-**New here?** [`docs/POSITIONING.md`](docs/POSITIONING.md) is the five-minute version. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) explains the diagram above.
+**RARA PLC is an intelligence suite for industrial PLCs.**
+It gives every machine a memory, an identity and an AI that can read both.
 
-## What is RaraPLC
+> **Status:** design stage. No field units yet. Nothing below is a shipping product; it is what we are building, in the open.
 
-An industrial PLC whose hardware and firmware are open, built around the STM32H743 (Arm Cortex-M7, 480 MHz). It is designed around three goals at the same time:
+## Highlights
 
-**1) AI in the firmware/software stack.** Claude is a working part of the development pipeline: schematic and PCB review, firmware architecture, code review, documentation. Add-ons are self-describing so an LLM can write their drivers directly, without an OS driver model: [`docs/SELF_DESCRIBING_ADDONS.md`](docs/SELF_DESCRIBING_ADDONS.md).
+- **Machine memory.** I/O map, wiring, program, contacts and history, stored with the machine.
+- **Signed history.** Every change is signed on-chip. Tampering shows.
+- **Always recoverable.** The last working version is kept, ready to restore.
+- **Works when the PLC is dead.** Plug in a phone or laptop and read the record.
+- **AI that knows your machine.** Claude reads the machine's own record, not generic manuals.
+- **Outside the control loop.** Your PLC runs the same with or without RARA.
+- **Your data stays yours.** Open formats, always exportable.
+- **Open where it connects.** Schematics, protocols and host libraries are open.
+- **Runs on real controllers.** Arduino Portenta Machine Control and Arduino Opta.
 
-**2) AI in commissioning and revamping.** Bringing RaraPLC into a new machine, or migrating a machine that runs an old closed PLC, with Claude assisting the technician end to end.
+## The suite
 
-**3) AI as the memory of installed machines.** Every deployment becomes a documented, queryable archive (I/O maps, wiring, logic, history) that Claude can reason over years later.
+<img alt="RARA PLC suite: each machine has an Ex Libris, the user has Acervus, AI reaches both through MCP" src="docs/assets/diagrams/suite.png">
 
-## How a technician changes logic
+| Component | What it does | Belongs to |
+|---|---|---|
+| **Ex Libris** | A small add-on module. It gives each machine a signed identity and its own logbook. | The machine |
+| **Acervus** | Everything your machines taught you, in one place: fixes, patterns, parts, people. | The user |
+| **MCP server** | Lets Claude, or any MCP-compatible AI client, talk to the machine's record. | — |
+| **Rara Bridge** | Live support. Claude reads the machine's record and helps a technician diagnose it. | — |
 
-The technician writes or says what they want. Claude drafts it as EARS requirements, a separate critic agent audits them with HAZOP guide words, the technician confirms, and the result is compiled into data for a fixed C runtime. **The model never writes C that runs in the control loop.** Full pipeline: [`docs/AI_WORKFLOW.md`](docs/AI_WORKFLOW.md).
+## Ex Libris
 
-<table>
-<tr>
-<td width="62%"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/mockups/ears-runtime-dark.png"><img alt="Extended EARS Runtime" src="docs/assets/mockups/ears-runtime-light.png"></picture></td>
-<td width="38%"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/mockups/technician-chat-dark.png"><img alt="Technician chat" src="docs/assets/mockups/technician-chat-light.png"></picture></td>
-</tr>
-<tr>
-<td><sub><b>Extended EARS Runtime</b>: intent → EARS → HAZOP finding → compiled block.</sub></td>
-<td><sub><b>Technician's chat</b>: the same pipeline from a phone. No YAML, ever.</sub></td>
-</tr>
-</table>
+*Ex libris*: the mark that tells you whose book this is. Here, it tells a machine who it is and where it comes from.
 
-## Remote hands, not remote access
+Ex Libris is the hardware piece of RARA PLC. It plugs into the PLC that already runs the machine, over **I2C**:
 
-The PLC never connects to the internet. For live diagnosis, **RARA Bridge** runs on the technician's own laptop or phone, connected to the board by USB; Claude reads what the technician shares and suggests the next step, but every command is run by the technician. Details: [`docs/SUPPORT_BRIDGE.md`](docs/SUPPORT_BRIDGE.md).
+- **Arduino Portenta Machine Control:** the front Grove connector. No need to open the controller.
+- **Arduino Opta:** the expansion port. Nothing to solder.
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/mockups/bridge-dark.png">
-  <img alt="RARA Bridge" src="docs/assets/mockups/bridge-light.png">
-</picture>
+What it keeps:
 
-Everything learned about a machine ends up in **Acervus**, a static, repo-like archive with one project (*Libris*) per machine, fed by closed sessions, never by live telemetry: [`docs/ACERVUS.md`](docs/ACERVUS.md).
+- **Identity.** A secure element gives the module keys that cannot be extracted. Genuine modules can prove it.
+- **History.** Every change to the logic: what, when, why and who asked. Signed, in the module's own non-volatile memory.
+- **Last good version.** If a new program fails, the machine goes back to the one that worked.
+- **A way in with the PLC off.** USB-C to read the record from a laptop or a phone.
 
-The UI images are concept mockups with fictional data; the clickable versions are in [`docs/demos/`](docs/demos/).
+What it never does: control outputs, take part in the scan cycle or touch any safety function. Writes from AI need a person at the machine, pressing a physical button.
 
-## Hardware at a glance
+<!-- EX-LIBRIS-RENDERS -->
 
-| | Main board |
-|---|---|
-| Compute | STM32H743ZIT6, FreeRTOS, A/B OTA, ROM DFU recovery |
-| I/O | 16 DI opto-isolated, encoder-capable · 16 DO 2 A low-side, STEP/DIR-capable · 8 AI 4–20 mA / 0–10 V |
-| Comms | Ethernet (Modbus TCP, OPC-UA, micro-ROS) · 2× RS-485 · CAN FD · USB-C |
-| Expansion | 40-pin HAT header, Raspberry Pi pinout |
+## How AI fits in
 
-**Stage 2, RARA.MB:** a motion HAT for six closed-loop stepper axes, joint gauges for cobots, and IO-Link to control end effectors. The focus today is getting the PLC running first.
+Claude talks to Ex Libris through an **MCP server**, an open protocol for AI tools.
 
-More: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · [`docs/WHY_STM32H7.md`](docs/WHY_STM32H7.md).
+- **Read:** identity, I/O map, events, history. Verify that a snapshot is genuine.
+- **Program:** the technician describes the behavior in plain language. Claude writes it as EARS requirements. The technician approves each one. Logic and tests are generated and stored as a *candidate*. Nothing loads until a person presses the presence button.
+- **Local or remote:** on the technician's laptop over USB-C, offline, with the machine stopped; or remote, for a phone or for support at a distance.
 
-## Open hardware, open source
+The MCP server is specified. It is not implemented yet.
 
-Hardware is released under CERN-OHL-S v2 (see `hardware/LICENSE`). Firmware is released under the Mozilla Public License 2.0 (see `firmware/LICENSE`): improvements to the runtime's own files must be shared back, while your own application code and add-on modules on top can stay private. Components are chosen to be sourceable (LCSC part numbers alongside every design) and, where possible, in small standard packages so small shops and hobbyists can build it too.
+## What it is not
 
-## Main board, Rev 1.1
+- Not a PLC replacement.
+- Not part of the control loop or of any safety function.
+- Not a cloud lock-in.
 
-<img alt="RaraPLC main board Rev 1.1, 3D render (top view)" src="docs/assets/pcb-rev1.1/raraplc-rev1.1-3d.png">
+## Open where it connects, closed where it's copied
 
-STM32H743 main board, 3D render from KiCad. 16 DI, 16 DO, 8 AI, Ethernet, 2× RS-485, CAN FD, USB-C and a 40-pin HAT header.
+We publish everything an integrator needs to trust, wire, repair and integrate Ex Libris. We keep closed what would let someone clone it, and what runs the service.
 
-## Project status
+<img alt="RARA PLC licensing by layer" src="docs/assets/diagrams/licensing.png">
 
-Seed stage. The runtime has been running the founder's own food-production machines for about 2,000 hours. The main board schematics are being finalized in KiCad and will be published here, with BOM and 3D files, once they are fabrication-ready.
+Full table and rules: [`LICENSE.md`](LICENSE.md).
 
-## Repository structure
+## Repository
 
 ```
-firmware/   STM32H743 firmware (HAL/Cube + Arduino_Core_STM32 compatible)
-hardware/   Schematics, PCB, BOM, 3D files (CERN-OHL-S v2)
-docs/       Architecture, AI workflow, design decisions, diagrams, UI demos
-.github/    Issue/PR templates, community health files
+docs/       Diagrams and brand assets
+.github/    Issue and pull request templates
 ```
 
-## Roadmap
-
-See [`docs/ROADMAP.md`](docs/ROADMAP.md). Near term: publish the v0.1 hardware (schematics + BOM with LCSC numbers), the firmware skeleton, and a first revamping case study documented end to end.
+Interface specs (I2C, USB, `machine.json`, MCP) and host code will land here as they are released, each folder with its own license.
 
 ## Contributing
 
-Contributions are welcome, see `CONTRIBUTING.md`. This project follows the Contributor Covenant (`CODE_OF_CONDUCT.md`).
+Ideas, questions and reviews are welcome: open an issue. See [`CONTRIBUTING.md`](CONTRIBUTING.md). This project follows the Contributor Covenant ([`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)).
 
 ## About
 
-Built by [Rara Machina](https://github.com/jorgefelipechurio). RaraPLC is an independent, community-driven project and is not affiliated with or endorsed by STMicroelectronics or Anthropic.
+Sponsored by Rara Machina, Buenos Aires. RARA PLC is an independent project. It is not affiliated with or endorsed by Arduino, Finder or Anthropic. Arduino, Opta and Portenta are trademarks of their owners.

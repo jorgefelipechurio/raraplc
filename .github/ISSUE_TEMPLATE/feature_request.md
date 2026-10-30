@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea or enhancement for RaraPLC
+about: Suggest an idea or enhancement for RARA PLC
 title: "[FEATURE] "
 labels: enhancement
 ---
@@ -19,4 +19,4 @@ Other approaches you've thought about, if any.
 
 ## Additional context
 
-Anything else useful: use case, hardware/firmware area affected, references.
+Anything else useful: the machine, the host PLC, the use case, references.

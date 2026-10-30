@@ -1,28 +1,35 @@
-# Contributing to RaraPLC
+# Contributing to RARA PLC
 
-Thanks for your interest in contributing to RaraPLC, an open source industrial PLC built on the STM32H743.
+Thanks for your interest in RARA PLC, an intelligence suite for industrial PLCs.
 
-## Ways to contribute
+## Ways to contribute today
 
-**Firmware:** improvements to the control firmware, drivers, examples, and tooling live under `firmware/` and are licensed under MPL-2.0.
+**Issues.** Questions, ideas and real stories about machines nobody remembers how to fix. Use the templates under `.github/ISSUE_TEMPLATE/`.
 
-**Hardware:** schematic reviews, layout suggestions, and BOM improvements for content under `hardware/` are welcome; that folder is licensed under CERN-OHL-S v2.
+**Reviews.** When the interface specs, the host library and the Ex Libris hardware docs are released, reviews from people who wire and maintain PLCs are the most valuable contribution.
 
-**Documentation:** fixes and additions to `docs/` and the README help newcomers get started faster.
-
-**Issues:** bug reports and feature requests use the templates under `.github/ISSUE_TEMPLATE/`.
+**Documentation.** Fixes to the README and `docs/` help newcomers.
 
 ## Before you start
 
-For anything beyond a small fix, open an issue first to discuss the approach. This avoids duplicated work and keeps large changes aligned with the project roadmap in `docs/ROADMAP.md`.
+For anything beyond a small fix, open an issue first so we can agree on the approach.
 
 ## License of contributions
 
-By submitting a pull request, you agree that your contribution is licensed under the same license as the folder it modifies: MPL-2.0 for `firmware/`, CERN-OHL-S v2 for `hardware/`. Contributions to `docs/` and other project files are licensed under MIT unless stated otherwise.
+Licensing is by layer; see [`LICENSE.md`](LICENSE.md). By submitting a pull request, you agree that your contribution is licensed under the license of the layer it touches:
+
+| Folder | License |
+|---|---|
+| README, `docs/` | CC BY 4.0 |
+| `specs/` (when released) | CC BY 4.0 for text, Apache-2.0 for schemas and examples |
+| `host/` (when released) | MPL-2.0 |
+| `hardware-docs/` (when released) | CC BY-SA 4.0 |
+
+Brand assets (RARA, Ex Libris, Rara Cat) are reserved trademarks and are not open to modification.
 
 ## Pull requests
 
-Keep pull requests focused on a single change. Fill out the pull request template, reference any related issue, and describe how you tested the change (build output, hardware revision, simulation, etc.).
+Keep pull requests focused on one change. Fill out the template, reference the related issue and say how you checked the change.
 
 ## Code of conduct
 

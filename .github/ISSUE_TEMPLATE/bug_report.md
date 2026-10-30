@@ -1,13 +1,13 @@
 ---
 name: Bug report
-about: Report a problem with firmware, hardware design, or documentation
+about: Report a problem with the docs, specs, host code or Ex Libris
 title: "[BUG] "
 labels: bug
 ---
 
 ## Area
 
-Firmware / Hardware / Docs
+Docs / Specs / Host code / Ex Libris / Other
 
 ## Description
 
@@ -15,8 +15,8 @@ What happened, and what did you expect instead?
 
 ## Steps to reproduce
 
-Steps, build/toolchain versions, and hardware revision if applicable.
+Steps, host PLC (Portenta Machine Control, Opta, other), versions.
 
 ## Additional context
 
-Logs, screenshots, schematics excerpts, anything else useful.
+Logs, screenshots, anything else useful.

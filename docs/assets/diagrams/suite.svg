@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" font-family="Inter,Segoe UI,Helvetica,Arial,sans-serif">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
+<rect width="1200" height="760" fill="#ffffff"/>
+<rect x="20" y="20" width="1160" height="250" rx="14" fill="#f6fbf7" stroke="#2e7d4f" stroke-width="2"/>
+<text x="44" y="54" font-size="20" font-weight="700" fill="#2e7d4f">①  EACH MACHINE</text>
+<text x="1156" y="54" font-size="16" text-anchor="end" fill="#2e7d4f" font-style="italic">Ex Libris belongs to the machine</text>
+<text x="210" y="78" font-size="15" fill="#8a8f99" text-anchor="middle">Machine 1</text>
+<rect x="110" y="88" width="200" height="52" rx="10" fill="#eef1f5" stroke="#667" stroke-width="2"/>
+<text x="210.0" y="109.0" font-size="16" font-weight="700" text-anchor="middle" fill="#334">PLC</text>
+<text x="210.0" y="131.0" font-size="14" font-weight="400" text-anchor="middle" fill="#334">runs the machine</text>
+<line x1="210" y1="140" x2="210" y2="166" stroke="#667" stroke-width="2"/>
+<text x="218" y="158" font-size="12" fill="#8a8f99">I2C</text>
+<rect x="110" y="166" width="200" height="78" rx="10" fill="#e3f3e8" stroke="#2e7d4f" stroke-width="2"/>
+<text x="210.0" y="189.0" font-size="17" font-weight="700" text-anchor="middle" fill="#334">Ex Libris</text>
+<text x="210.0" y="211.0" font-size="15" font-weight="400" text-anchor="middle" fill="#334">identity · history</text>
+<text x="210.0" y="233.0" font-size="15" font-weight="400" text-anchor="middle" fill="#334">program · last good</text>
+<text x="570" y="78" font-size="15" fill="#8a8f99" text-anchor="middle">Machine 2</text>
+<rect x="470" y="88" width="200" height="52" rx="10" fill="#eef1f5" stroke="#667" stroke-width="2"/>
+<text x="570.0" y="109.0" font-size="16" font-weight="700" text-anchor="middle" fill="#334">PLC</text>
+<text x="570.0" y="131.0" font-size="14" font-weight="400" text-anchor="middle" fill="#334">runs the machine</text>
+<line x1="570" y1="140" x2="570" y2="166" stroke="#667" stroke-width="2"/>
+<text x="578" y="158" font-size="12" fill="#8a8f99">I2C</text>
+<rect x="470" y="166" width="200" height="78" rx="10" fill="#e3f3e8" stroke="#2e7d4f" stroke-width="2"/>
+<text x="570.0" y="189.0" font-size="17" font-weight="700" text-anchor="middle" fill="#334">Ex Libris</text>
+<text x="570.0" y="211.0" font-size="15" font-weight="400" text-anchor="middle" fill="#334">identity · history</text>
+<text x="570.0" y="233.0" font-size="15" font-weight="400" text-anchor="middle" fill="#334">program · last good</text>
+<text x="780.0" y="160" font-size="34" fill="#8a8f99" text-anchor="middle">· · ·</text>
+<text x="990" y="78" font-size="15" fill="#8a8f99" text-anchor="middle">Machine N</text>
+<rect x="890" y="88" width="200" height="52" rx="10" fill="#eef1f5" stroke="#667" stroke-width="2"/>
+<text x="990.0" y="109.0" font-size="16" font-weight="700" text-anchor="middle" fill="#334">PLC</text>
+<text x="990.0" y="131.0" font-size="14" font-weight="400" text-anchor="middle" fill="#334">runs the machine</text>
+<line x1="990" y1="140" x2="990" y2="166" stroke="#667" stroke-width="2"/>
+<text x="998" y="158" font-size="12" fill="#8a8f99">I2C</text>
+<rect x="890" y="166" width="200" height="78" rx="10" fill="#e3f3e8" stroke="#2e7d4f" stroke-width="2"/>
+<text x="990.0" y="189.0" font-size="17" font-weight="700" text-anchor="middle" fill="#334">Ex Libris</text>
+<text x="990.0" y="211.0" font-size="15" font-weight="400" text-anchor="middle" fill="#334">identity · history</text>
+<text x="990.0" y="233.0" font-size="15" font-weight="400" text-anchor="middle" fill="#334">program · last good</text>
+<rect x="20" y="310" width="1160" height="170" rx="14" fill="#f5f8fd" stroke="#2f5fa8" stroke-width="2"/>
+<text x="44" y="344" font-size="20" font-weight="700" fill="#2f5fa8">②  THE USER</text>
+<text x="1156" y="344" font-size="16" text-anchor="end" fill="#2f5fa8" font-style="italic">Acervus belongs to the user</text>
+<rect x="390" y="350" width="420" height="110" rx="10" fill="#e6eefb" stroke="#2f5fa8" stroke-width="2"/>
+<text x="600.0" y="389.0" font-size="19" font-weight="700" text-anchor="middle" fill="#334">Acervus</text>
+<text x="600.0" y="411.0" font-size="17" font-weight="400" text-anchor="middle" fill="#334">everything your machines taught you,</text>
+<text x="600.0" y="433.0" font-size="17" font-weight="400" text-anchor="middle" fill="#334">in one place: fixes, patterns, parts, people</text>
+<line x1="210" y1="244" x2="474.0" y2="348" stroke="#555" stroke-width="2.2" marker-end="url(#ar)"/>
+<line x1="570" y1="244" x2="600.0" y2="348" stroke="#555" stroke-width="2.2" marker-end="url(#ar)"/>
+<line x1="990" y1="244" x2="747.0" y2="348" stroke="#555" stroke-width="2.2" marker-end="url(#ar)"/>
+<text x="640" y="300" font-size="14" fill="#555">signed records</text>
+<rect x="20" y="520" width="1160" height="230" rx="14" fill="#fbf7fd" stroke="#7b3fa0" stroke-width="2"/>
+<text x="44" y="554" font-size="20" font-weight="700" fill="#7b3fa0">③  AI ACCESS</text>
+<text x="1156" y="554" font-size="16" text-anchor="end" fill="#7b3fa0" font-style="italic"></text>
+<rect x="470" y="590" width="260" height="90" rx="10" fill="#f3e8f8" stroke="#7b3fa0" stroke-width="2"/>
+<text x="600.0" y="630.0" font-size="19" font-weight="700" text-anchor="middle" fill="#334">MCP</text>
+<text x="600.0" y="652.0" font-size="17" font-weight="400" text-anchor="middle" fill="#334">the door for AI</text>
+<rect x="850" y="590" width="260" height="90" rx="10" fill="#f3e8f8" stroke="#7b3fa0" stroke-width="2"/>
+<text x="980.0" y="630.0" font-size="19" font-weight="700" text-anchor="middle" fill="#334">Claude</text>
+<text x="980.0" y="652.0" font-size="17" font-weight="400" text-anchor="middle" fill="#334">or any MCP client</text>
+<rect x="90" y="590" width="260" height="90" rx="10" fill="#f3e8f8" stroke="#7b3fa0" stroke-width="2"/>
+<text x="220.0" y="619.0" font-size="19" font-weight="700" text-anchor="middle" fill="#334">Rara Bridge</text>
+<text x="220.0" y="641.0" font-size="17" font-weight="400" text-anchor="middle" fill="#334">Claude + a technician,</text>
+<text x="220.0" y="663.0" font-size="17" font-weight="400" text-anchor="middle" fill="#334">live support</text>
+<line x1="600" y1="462" x2="600" y2="588" stroke="#555" stroke-width="2.2" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<line x1="732" y1="635" x2="848" y2="635" stroke="#555" stroke-width="2.2" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<path d="M980,682 C980,735 220,735 220,684" fill="none" stroke="#555" stroke-width="2.2" marker-start="url(#ar)" marker-end="url(#ar)"/>
+</svg>
