@@ -53,7 +53,9 @@ What it keeps:
 
 What it never does: control outputs, take part in the scan cycle or touch any safety function. Writes from AI need a person at the machine, pressing a physical button.
 
-<!-- EX-LIBRIS-RENDERS -->
+<img alt="Ex Libris Rev 1.0, 3D render with the display on" src="docs/assets/ex-libris/ex-libris-rev1.0-display-on.png">
+
+<sub><b>Ex Libris Rev 1.0</b>, 3D render from KiCad. Connectors for the Portenta expansion port and the Opta, PRESENCE button, USB-C. The screen content is illustrative; the machine and its data are fictional.</sub>
 
 ## How AI fits in
 
