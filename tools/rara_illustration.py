@@ -39,7 +39,7 @@ def cat(s, cx, cy, size, bg=MASCARA):
 
 
 # ---------------------------------------------------------------- phone
-def phone(s, x, y):
+def phone(s, x, y, host='Portenta MC'):
     w, h = 72 * K, 150 * K
     s.add(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="30" fill="{TINTA}"/>')
     sx, sy, sw, sh = x + 9, y + 12, w - 18, h - 24
@@ -51,7 +51,7 @@ def phone(s, x, y):
     s.text(cx, sy + 110, 'tunnel #2', 19, SERIF, TINTA)
     s.add(f'<rect x="{cx}" y="{sy + 122}" width="52" height="20" rx="10" fill="{MASCARA}"/>')
     s.text(cx + 26, sy + 136, 'RUN', 11, MONO, PAPEL, 'middle', '700', 1)
-    s.text(cx + 62, sy + 136, 'Portenta MC', 11, SANS, TINTA_SUAVE)
+    s.text(cx + 62, sy + 136, host, 11, SANS, TINTA_SUAVE)
     rows = [('PROGRAM', 'v1.4.2 · signed'), ('LAST GOOD', 'v1.4.1 · ready'),
             ('LAST EVENT', '3 h ago · E-stop reset'), ('I/O MAP', '24 points · signed')]
     yy = sy + 170
@@ -73,9 +73,21 @@ def phone(s, x, y):
 
 
 # ------------------------------------------------------------- Ex Libris
-def exlibris(s, X0, Y0):
+def exlibris(s, X0, Y0, paddle=False):
     P = lambda x, y: (X0 + (x - 100) * K, Y0 + (y - 100) * K)
     bw, bh = 72 * K, 47.35 * K
+    if paddle:
+        # Opta paddle (J305): neck with mouse bites + 16 x 14 mm tab, 10 edge fingers, 2 mm pitch
+        nx, ny = P(118.5, 147.0)
+        s.add(f'<rect x="{nx}" y="{ny}" width="{5 * K}" height="{2.6 * K}" fill="{MASK}"/>')
+        tx, ty = P(113, 149.35)
+        s.add(f'<rect x="{tx}" y="{ty}" width="{16 * K}" height="{14 * K}" rx="2" fill="{MASK}"/>')
+        for n in range(10):
+            fx, fy = P(113 + 0.6 + n * 1.6, 158.6)
+            s.add(f'<rect x="{fx}" y="{fy}" width="{1.0 * K}" height="{4.4 * K}" rx="1" fill="#C9A14A"/>')
+        lx, ly = P(121, 153.4)
+        for i, t in enumerate(['OPTA', 'EXPANSION', 'SLOT']):
+            s.text(lx, ly + i * 7.5, t, 6, SANS, SILK, 'middle', '700', 0.5)
     # board + soft shadow
     s.add(f'<rect x="{X0 + 5}" y="{Y0 + 7}" width="{bw}" height="{bh}" rx="5" fill="{TINTA}" opacity=".12"/>')
     s.add(f'<rect x="{X0}" y="{Y0}" width="{bw}" height="{bh}" rx="5" fill="{MASK}"/>')
